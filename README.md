@@ -1,40 +1,28 @@
 # JDR
-Jeu de Rôle crée dans le cadre du cours de POO
+Jeu de Rôle créé dans le cadre du cours de POO
 
 
-Que créer, qui fait quoi.
 Liste base : 
-    Un héro avec :
-    - Point de vie
-    - Défense (Réduction de dégat)
-    - Damage (Au poing)
-    - Différentes attaques
+    Un héro :
+    - Point de vie (+-20PV)
+    - Une attaque
+    - Stat de défense (Réduction de dégat)
 
     Une map : 
-    - Différents environnement (Forêt, prairie) (?)
+    - Différents environnement (Forêt, prairie) (purement graphique)
     - Une zone de boss (ou deux)
     - Un endroit de spawn (respawn)
 
     Au moins 3 ennemis (par zone) et 1 boss:
     - Point de vie
-    - Différentes attaques
+    - Une attaque
+    - Stat de défense
 
     Fontaine de vie :
-    - Reprendre du Heal
+    - Rend entre 5 et 15 PV
     - Visible sur la map
-    - Génère un random de placement sur map
-    - Donne entre 5 et 15 PV
+    - Placé aléatoirement sur la map
     
-    Coffre aux armes :
-    - Différents types d'arme (Hache, épée)
-
-    Coffre aux armures :
-    - Type d'armure (Fer, tissu, ..)
-
-    Armes :
-    - Différents dégâts
-    - Type bois, bronze, gold
-    
-    Armure : 
-    - Différentes stats de défenses (random)
-    - Fer, Tissu, Cuir
+    Coffres
+    - Bonus d'attaque (Différents types d'arme (Hache, épée, bois, bronze, or))
+    - Bonus de défense (Type d'armure (Fer, tissu, cuir ..))
