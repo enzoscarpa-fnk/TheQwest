@@ -1,7 +1,74 @@
 ﻿@page "/"
+@using JDR.Models
+
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3>Fontaine de Vie</h3>
 
-Welcome to your new game.
+<p><strong>Nom du joueur:</strong> @player.Name</p>
+<p><strong>Vie maximale du joueur:</strong> @player.MaxLife HP</p>
+<p><strong>Vie actuelle du joueur:</strong> @player.CurrentLife HP</p>
+
+<p><strong>Nom du monstre:</strong> @monster.Name</p>
+
+<p><strong>Nom de la fontaine:</strong> @fountain.Name</p>
+<p><strong>Emplacement de la fontaine:</strong> @fountain.Location</p>
+
+<p><strong>Nombre de tour:</strong> @turnCounter</p>
+
+<button class="btn btn-primary" @onclick="ApproachFountain">Approcher de la fontaine</button>
+<button class="btn btn-danger" @onclick="AttackMonster">Attaquer le monstre</button>
+
+@if (isGameOver)
+{
+    <div class="popup-overlay">
+        <div class="popup">
+            <p>Vous avez perdu ! Votre vie est à zéro.</p>
+            <button class="btn btn-success" @onclick="RestartGame">Rejouer</button>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    private Player player = new Player("John Doe", 100);
+    private LifeFountain fountain = new LifeFountain("Fontaine Sacrée", "Forêt Enchantée");
+    private Monster monster = new Monster("Dragon");
+    private bool isGameOver = false;
+    private int turnCounter = 0;
+
+    private void ApproachFountain()
+    {
+        // La fontaine régénère la vie du joueur
+        fountain.HealPlayer(player);
+        IncrementTurnCounter();
+    }
+
+    private void AttackMonster()
+    {
+        // Le monstre attaque le joueur
+        monster.Attack(player);
+        CheckPlayerHealth();
+        IncrementTurnCounter();
+    }
+
+    private void CheckPlayerHealth()
+    {
+        if (player.CurrentLife <= 0)
+        {
+            isGameOver = true; // On déclenche la popup de fin de jeu
+        }
+    }
+
+    private void IncrementTurnCounter() { turnCounter++; }
+
+    private void RestartGame()
+    {
+        player = new Player("John Doe", 100);
+        monster = new Monster("Dragon");
+        turnCounter = 0;
+        isGameOver = false; // Masquer la popup de fin de jeu
+    }
+}
