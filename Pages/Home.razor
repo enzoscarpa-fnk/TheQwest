@@ -1,7 +1,35 @@
 ﻿@page "/"
+@using JDR.Models
 
-<PageTitle>Home</PageTitle>
+<h3>Grille avec Joueur</h3>
 
-<h1>Hello, world!</h1>
+<div 
+    class="grid" 
+    tabindex="0" 
+    @onkeydown="HandleKeyDown"
+>
+    @for (int row = 0; row < GridSize; row++)
+    {
+        <div class="row">
+            @for (int col = 0; col < GridSize; col++)
+            {
+                <div class="cell @(row == player.Y && col == player.X ? "player" : "")"></div>
+            }
+        </div>
+    }
+</div>
 
-Welcome to your new game.
+@code {
+    private const int GridSize = 10;
+    private Player player = new Player();
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key.StartsWith("Arrow"))
+        {
+            string direction = e.Key.Replace("Arrow", ""); // Extrait "Up", "Down", "Left", ou "Right"
+            player.Move(direction, GridSize);
+            StateHasChanged(); // Met à jour l'affichage
+        }
+    }
+}

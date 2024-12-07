@@ -1,0 +1,42 @@
+﻿.grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.grid-row {
+    display: flex;
+    gap: 2px;
+}
+
+.grid-cell {
+    width: 20px;
+    height: 20px;
+    background-color: lightgray;
+    border: 1px solid black;
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(10, 50px);
+    grid-template-columns: repeat(10, 50px);
+    gap: 2px;
+    outline: none; /* Supprimer le contour sur focus */
+}
+
+.row {
+    display: contents;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: lightgray;
+    border: 1px solid #ddd;
+}
+
+.cell.player {
+    background-color: blue;
+    border-radius: 50%;
+}
