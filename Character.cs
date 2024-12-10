@@ -4,23 +4,21 @@ public abstract class Character
 {
     public string CharacterName { get; set; }
     public int Level { get; set; }
-    public int ExperienceValue { get; set; }
-    public bool IsDead { get; set; }
+    private bool IsDead { get; set; }
     public int HealthValue { get; set; }
     public int EnergyValue { get; set; }
     public int AttackValue { get; set; }
     public int ArmorValue { get; set; }
+    public double CriticalHitFactor { get; set; }
     
-    public Character(string characterName, int level, int experienceValue, bool isDead, int healthValue, int energyValue, int attackValue, int armorValue)
+    public Character(string characterName, bool isDead, int energyValue, int armorValue, int level, double criticalHitFactor = 2)
     {
         CharacterName = characterName;
         Level = level;
-        ExperienceValue = experienceValue;
         IsDead = isDead;
-        HealthValue = healthValue;
         EnergyValue = energyValue;
-        AttackValue = attackValue;
         ArmorValue = armorValue;
+        CriticalHitFactor = criticalHitFactor;
     }
 
     public void Attack(Character target)
@@ -28,7 +26,6 @@ public abstract class Character
         if (target.IsDead || EnergyValue <= 0)
             return;
         
-        EnergyValue -= 3;
         var damageDealt = AttackValue - target.ArmorValue;
         Console.WriteLine($"{CharacterName} dealt {damageDealt} damage to {target.CharacterName}.");
         target.TakeDamage(damageDealt, this);
@@ -36,12 +33,12 @@ public abstract class Character
 
     public void TakeDamage(int damage, Character attacker)
     {
+        Console.WriteLine($"{CharacterName} took {damage} damage from {attacker.CharacterName}.");
         HealthValue -= damage;
         if (HealthValue <= 0)
         {
             Die(attacker);
         }
-        Console.WriteLine($"{CharacterName} took {damage} damage from {attacker.CharacterName}.");
     }
 
     public void Heal(int heal)
@@ -53,7 +50,10 @@ public abstract class Character
     {
         HealthValue = 0;
         IsDead = true;
-        Console.WriteLine($"{CharacterName} died !");
-        attacker.ExperienceValue += Level * 10;
+        Console.WriteLine($"{CharacterName} has died !");
+        if (attacker is Hero heroAttacker)
+        {
+            heroAttacker.CalculateExperience(this);
+        }
     }
 }

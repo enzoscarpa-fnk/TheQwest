@@ -1,8 +1,8 @@
 namespace JDR;
 
-public class HeroWarrior : Hero
+public class HeroRogue : Hero
 {
-    public HeroWarrior(
+    public HeroRogue(
         string characterName,
         bool isDead,
         int energyValue,
@@ -10,11 +10,11 @@ public class HeroWarrior : Hero
         LevelProgression progression,
         int level,
         int experienceValue,
-        int armor = 4,
+        int armor = 3,
         int bonusDamage = 0,
-        int criticalChance = 2,
-        int hasteRating = 5,
-        int dodgeRating = 5
+        int criticalChance = 3,
+        int hasteRating = 6,
+        int dodgeRating = 6
     ) : base(characterName, isDead, energyValue, armorValue, progression, level, experienceValue)
     {
         Armor = armor;
@@ -28,13 +28,13 @@ public class HeroWarrior : Hero
     // Initializes stats
     private void InitializeStats()
     {
-        Stamina = HeroStatsCalculator.CalculateStat(4, 1.3, Level);
-        Strength = HeroStatsCalculator.CalculateStat(4, 1.25, Level);
+        Stamina = HeroStatsCalculator.CalculateStat(3, 1.25, Level);
+        Strength = HeroStatsCalculator.CalculateStat(1, 1.05, Level);
         Intellect = HeroStatsCalculator.CalculateStat(1, 1.05, Level);
-        Agility = HeroStatsCalculator.CalculateStat(1, 1.05, Level);
-        Spirit = HeroStatsCalculator.CalculateStat(2, 1.15, Level);
+        Agility = HeroStatsCalculator.CalculateStat(4, 1.25, Level);
+        Spirit = HeroStatsCalculator.CalculateStat(4, 1.2, Level);
         HealthValue = Stamina * 10;
-        AttackValue = (int)Math.Round(Strength * 1.8);
+        AttackValue = (int)Math.Round(Agility * 1.8);
     }
     
     protected override void LevelUp()

@@ -1,23 +1,34 @@
 ﻿@page "/"
-<!-- @using JDR.Models -->
 
 <PageTitle>Home</PageTitle>
+
+<div id="hero-setup">
+    <h3>Hero setup</h3>
+    <p>Here goes the hero setup component.</p>
+    <p>[A form to input the hero's name]</p>
+    <p>[A drop down menu to choose hero's class]</p>
+</div>
 
 <div id="fight">
     <h3>Fight</h3>
     <div class="players-container">
         <div class="player">
-            <p><strong>Player 1:</strong> @warrior.CharacterName</p>
-            <p><strong>Health:</strong> @warrior.HealthValue HP</p>
-            <p><strong>Energy:</strong> @warrior.EnergyValue Energy</p>
-            <button class="btn btn-danger" @onclick="WarriorAttack">P1 Attack P2</button>
+            <p><strong>Player's name:</strong> @hero?.CharacterName</p>
+            <p><strong>Level:</strong> @hero?.Level</p>
+            <p><strong>Experience:</strong> @hero?.ExperienceValue / @hero?.ExperienceToNextLevel</p>
+            <p><strong>Health:</strong> @hero?.HealthValue HP</p>
+            <p><strong>Energy:</strong> @hero?.EnergyValue Energy</p>
+            <p><strong>Attack:</strong> @hero?.AttackValue Damage</p>
+            <button class="btn btn-danger" @onclick="HeroAttack">P2 Attack P1</button>
         </div>
-
-        <div class="player">
-            <p><strong>Player 2:</strong> @mage.CharacterName</p>
-            <p><strong>Health:</strong> @mage.HealthValue HP</p>
-            <p><strong>Energy:</strong> @mage.EnergyValue Energy</p>
-            <button class="btn btn-danger" @onclick="MageAttack">P2 Attack P1</button>
+        <h1>×</h1>
+        <div class="opponent">
+            <p><strong>Foe's name:</strong> @foe?.CharacterName</p>
+            <p><strong>Level:</strong> @foe?.Level</p>
+            <p><strong>LevelRollResult:</strong> @foe?.RollResult</p>
+            <p><strong>Health:</strong> @foe?.HealthValue HP</p>
+            <p><strong>Energy:</strong> @foe?.EnergyValue Energy</p>
+            <button class="btn btn-danger" @onclick="FoeAttack">Foe Attack P1</button>
         </div>
     </div>
 </div>
@@ -28,33 +39,30 @@
 </div>
 
 @code {
-    // Embedded Console
-    
-    void LogSomething()
-    {
-        Console.WriteLine("This is a test message!");
-    }
-    
     // Fight Plugin
-    private Hero_Warrior? warrior;
-    private Hero_Mage? mage;
+    private readonly LevelProgression levelProgression = new();
+    private HeroMage? hero;
+    private FoeGoblin? foe;
 
     protected override void OnInitialized()
     {
-        // Initialize player 1
-        warrior = new Hero_Warrior("Ragnar", 1, 0, false, 20, 12, 5, 3);
-
-        // Initialize player 2
-        mage = new Hero_Mage("Ariana", 1, 0, false, 16, 18, 7, 2);
-    }
-
-    private void WarriorAttack()
-    {
-        warrior.Attack(mage);
+        // Initialize player
+        hero = new HeroMage("Ariana", false, 40, 2, levelProgression, 1, 0);
+        
+        // Initialize foe
+        foe = new FoeGoblin("Goblin", false, 36, 52, 4, 3);
+        foe.CalculateLevel(hero.Level);
     }
     
-    private void MageAttack()
+    private void HeroAttack()
     {
-        mage.Attack(warrior);
+        if (foe != null) hero?.Attack(foe);
+        StateHasChanged();
+    }
+    
+    private void FoeAttack()
+    {
+        if (hero != null) foe?.Attack(hero);
+        StateHasChanged();
     }
 }
