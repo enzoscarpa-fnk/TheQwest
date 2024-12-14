@@ -1,24 +1,27 @@
 ﻿@page "/"
 @using JDR.Models
 
+<h4 id="title">Grille avec Joueur</h4>
 
-<PageTitle>Home</PageTitle>
+<div 
+    class="grid" 
+    tabindex="0"
+    @onkeydown="HandleKeyDown"
+    @ref="gridRef"
+    autofocus
+>
+    @for (int row = 0; row < GridSize; row++)
+    {
+        @for (int col = 0; col < GridSize; col++)
+        {
+            <div class="cell @(row == player.Y && col == player.X ? $"sprite {player.FacingDirection}" : "")"></div>
+        }
+    }
+</div>
 
-<h3>Fontaine de Vie</h3>
-
-<p><strong>Nom du joueur:</strong> @player.Name</p>
-<p><strong>Vie maximale du joueur:</strong> @player.MaxLife HP</p>
-<p><strong>Vie actuelle du joueur:</strong> @player.CurrentLife HP</p>
-
-<p><strong>Nom du monstre:</strong> @monster.Name</p>
-
-<p><strong>Nom de la fontaine:</strong> @fountain.Name</p>
-<p><strong>Emplacement de la fontaine:</strong> @fountain.Location</p>
-
-<p><strong>Nombre de tour:</strong> @turnCounter</p>
-
-<button class="btn btn-primary" @onclick="ApproachFountain">Approcher de la fontaine</button>
-<button class="btn btn-danger" @onclick="AttackMonster">Attaquer le monstre</button>
+@code {
+    private const int GridSize = 10;
+    private Player player = new Player();
 
 @if (isGameOver)
 {
@@ -56,14 +59,16 @@
 
     private void CheckPlayerHealth()
     {
-        if (player.CurrentLife <= 0)
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key.StartsWith("Arrow"))
         {
-            isGameOver = true; // On déclenche la popup de fin de jeu
+            string direction = e.Key.Replace("Arrow", ""); // Extrait "Up", "Down", "Left", ou "Right"
+            player.Move(direction, GridSize);
+            StateHasChanged(); // Met à jour l'affichage
         }
     }
-
-    private void IncrementTurnCounter() { turnCounter++; }
-
+}
     private void RestartGame()
     {
         player = new Player("John Doe", 100);
@@ -71,4 +76,17 @@
         turnCounter = 0;
         isGameOver = false; // Masquer la popup de fin de jeu
     }
-}
+}            isGameOver = true; // On déclenche la popup de fin de jeu
+        }
+    }
+
+    private void IncrementTurnCounter() { turnCounter++; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)        
+            {
+                await gridRef.FocusAsync();
+            }
+    }
+
+Welcome to your new game.

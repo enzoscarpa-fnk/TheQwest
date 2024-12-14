@@ -1,3 +1,11 @@
+.grid {
+    display: grid;
+    grid-template-rows: repeat(10, 64px);
+    grid-template-columns: repeat(10, 64px);
+    gap: 2px;
+    margin: auto;
+    width: 658px;
+    outline: 2px solid black; /* Supprimer le contour sur focus */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -11,6 +19,11 @@
     z-index: 1000;
 }
 
+.cell {
+    width: 64px;
+    height: 64px;
+    background-color: lightgray;
+    border: 1px solid #ddd;
 .popup {
     background-color: white;
     padding: 20px;
@@ -19,6 +32,36 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+@keyframes spriteAnimation {
+    from {
+        background-position: 0px;
+    }
+
+    to {
+        background-position: -384px;
+    }
+    /* 64px * 6 frames */
+}
+
+.sprite {
+    width: 64px; /* largeur d'une frame */
+    height: 64px; /* hauteur d'une frame */
+    background-image: url('/images/Run-Sheet.png');
+    background-repeat: no-repeat;
+    animation: spriteAnimation 1s steps(6) infinite;
+    transform-origin: center center;
+}
+
+.Right {
+    transform: scaleX(1);
+}
+
+.Left {
+    transform: scaleX(-1);
+}
+
+#title {
+    text-align: center;
 .popup button {
     margin-top: 10px;
 }
