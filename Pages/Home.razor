@@ -1,10 +1,10 @@
 ﻿@page "/"
 @using JDR.Models
 
-<h4 id="title">Grille avec Joueur</h4>
+<h4 id="title">@player.Name : @player.CurrentLife / @player.MaxLife</h4>
 
-<div 
-    class="grid" 
+<div
+    class="grid"
     tabindex="0"
     @onkeydown="HandleKeyDown"
     @ref="gridRef"
@@ -14,22 +14,65 @@
     {
         @for (int col = 0; col < GridSize; col++)
         {
-            <div class="cell @(row == player.Y && col == player.X ? $"sprite {player.FacingDirection}" : "")"></div>
+            var cellContent = "";
+            if (row == player.Y && col == player.X)
+                cellContent = $"sprite {player.FacingDirection}";
+            else if (monsters.Any(m => m.X == col && m.Y == row))
+                cellContent = "monster";
+            else if (fountains.Any(m => m.X == col && m.Y == row))
+                cellContent = "fountain";
+            <div class="cell @cellContent"></div>
         }
     }
 </div>
 
+@if (isGameOver)
+{
+    <div class="popup-overlay">
+        <div class="popup">
+            <p>Vous avez perdu ! Votre vie est à zéro.</p>
+            <button class="btn btn-success" @onclick="RestartGame">Rejouer</button>
+        </div>
+    </div>
+}
 @code {
     private const int GridSize = 10;
-    private Player player = new Player();
     private ElementReference gridRef;
+    private Player player = new Player("John Doe", 100);
+    private bool isGameOver = false;
+    private List<Monster> monsters = new();
+    private List<LifeFountain> fountains = new();
+    private Random random = new();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private void GenerateEntities()
     {
-        if (firstRender)        
-            {
-                await gridRef.FocusAsync();
-            }
+        monsters.Clear();
+        fountains.Clear();
+
+        for (int i = 0; i < 5; i++)
+        {
+            (int x, int y) = GetRandomPosition();
+            monsters.Add(new Monster(x, y));
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            (int x, int y) = GetRandomPosition();
+            fountains.Add(new LifeFountain(x, y));
+        }
+    }
+
+    private (int X, int Y) GetRandomPosition()
+    {
+        (int X, int Y) position;
+        do
+        {
+            position = (random.Next(0, GridSize), random.Next(0, GridSize));
+        } while (
+            monsters.Any(m => m.X == position.X && m.Y == position.Y) ||
+            fountains.Any(f => f.X == position.X && f.Y == position.Y) ||
+            (position.X == player.X && position.Y == player.Y));
+        return position;
     }
 
     private void HandleKeyDown(KeyboardEventArgs e)
@@ -38,7 +81,52 @@
         {
             string direction = e.Key.Replace("Arrow", ""); // Extrait "Up", "Down", "Left", ou "Right"
             player.Move(direction, GridSize);
+            CheckInteractions();    
             StateHasChanged(); // Met à jour l'affichage
         }
     }
+
+    private void CheckInteractions()
+    {
+        var playerPosition = (player.X, player.Y);
+
+        // Interaction avec un monstre
+        var monster = monsters.FirstOrDefault(m => (m.X, m.Y) == playerPosition);
+        if (monster != null)
+        {
+            Monster.Attack(player);
+            monsters.Remove(monster);
+            if (player.CurrentLife <= 0) { isGameOver = true; }
+        }
+
+        // Interaction avec une fontaine
+        var fountain = fountains.FirstOrDefault(f => (f.X, f.Y) == playerPosition);
+        if (fountain != null)
+        {
+            LifeFountain.HealPlayer(player);
+            fountains.Remove(fountain);
+        }
+    }
+
+
+    private void RestartGame()
+    {
+        player = new Player("John Doe", 100);
+        GenerateEntities();
+        isGameOver = false; // Masquer la popup de fin de jeu
+    }
+
+    protected override void OnInitialized()
+    {
+        GenerateEntities(); // Générer monstres et fontaines au début
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            {
+                await gridRef.FocusAsync();
+            }
+    }
 }
+    

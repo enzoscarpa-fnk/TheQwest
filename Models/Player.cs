@@ -1,10 +1,21 @@
-﻿namespace JDR.Models
+namespace JDR.Models
 {
     public class Player
     {
         public int X { get; private set; } = 0;
         public int Y { get; private set; } = 0;
         public Direction FacingDirection { get; private set; } = Direction.Right;
+        public string? Name { get; set; }
+        public int MaxLife { get; set; }
+        public int CurrentLife { get; set; }
+
+        // Constructeur
+        public Player(string name, int maxLife)
+        {
+            Name = name;
+            MaxLife = maxLife;
+            CurrentLife = maxLife;
+        }
 
         public void Move(string direction, int gridSize)
         {
@@ -25,6 +36,13 @@
                     FacingDirection = Direction.Right;
                     break;
             }
+        }
+
+        // Méthode pour guérir le joueur
+        public void Heal(int healAmount)
+        {
+            // Augmenter la vie du joueur en s'assurant qu'il ne dépasse pas la vie maximale
+            CurrentLife = Math.Min(MaxLife, CurrentLife + healAmount);
         }
     }
 
