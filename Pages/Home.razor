@@ -1,12 +1,14 @@
 ﻿@page "/"
 @using JDR.Models
 
-<h3>Grille avec Joueur</h3>
+<h4 id="title">Grille avec Joueur</h4>
 
 <div 
     class="grid" 
-    tabindex="0" 
+    tabindex="0"
     @onkeydown="HandleKeyDown"
+    @ref="gridRef"
+    autofocus
 >
     @for (int row = 0; row < GridSize; row++)
     {
@@ -20,6 +22,15 @@
 @code {
     private const int GridSize = 10;
     private Player player = new Player();
+    private ElementReference gridRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)        
+            {
+                await gridRef.FocusAsync();
+            }
+    }
 
     private void HandleKeyDown(KeyboardEventArgs e)
     {

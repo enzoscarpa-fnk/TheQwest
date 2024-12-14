@@ -3,6 +3,8 @@
     grid-template-rows: repeat(10, 64px);
     grid-template-columns: repeat(10, 64px);
     gap: 2px;
+    margin: auto;
+    width: 658px;
     outline: 2px solid black; /* Supprimer le contour sur focus */
 }
 
@@ -43,4 +45,8 @@
 
 .Left {
     transform: scaleX(-1);
+}
+
+#title {
+    text-align: center;
 }
