@@ -19,10 +19,6 @@
     }
 </div>
 
-@code {
-    private const int GridSize = 10;
-    private Player player = new Player();
-
 @if (isGameOver)
 {
     <div class="popup-overlay">
@@ -32,33 +28,27 @@
         </div>
     </div>
 }
-
-
-
 @code {
+    private const int GridSize = 10;
+    private ElementReference gridRef;
     private Player player = new Player("John Doe", 100);
     private LifeFountain fountain = new LifeFountain("Fontaine Sacrée", "Forêt Enchantée");
     private Monster monster = new Monster("Dragon");
     private bool isGameOver = false;
-    private int turnCounter = 0;
 
     private void ApproachFountain()
     {
         // La fontaine régénère la vie du joueur
         fountain.HealPlayer(player);
-        IncrementTurnCounter();
     }
 
     private void AttackMonster()
     {
         // Le monstre attaque le joueur
         monster.Attack(player);
-        CheckPlayerHealth();
-        IncrementTurnCounter();
+        // CheckPlayerHealth();
     }
 
-    private void CheckPlayerHealth()
-    {
     private void HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key.StartsWith("Arrow"))
@@ -68,25 +58,20 @@
             StateHasChanged(); // Met à jour l'affichage
         }
     }
-}
+
     private void RestartGame()
     {
         player = new Player("John Doe", 100);
         monster = new Monster("Dragon");
-        turnCounter = 0;
         isGameOver = false; // Masquer la popup de fin de jeu
     }
-}            isGameOver = true; // On déclenche la popup de fin de jeu
-        }
-    }
 
-    private void IncrementTurnCounter() { turnCounter++; }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)        
+        if (firstRender)
             {
                 await gridRef.FocusAsync();
             }
     }
-
-Welcome to your new game.
+}
+    

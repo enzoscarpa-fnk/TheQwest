@@ -6,6 +6,8 @@
     margin: auto;
     width: 658px;
     outline: 2px solid black; /* Supprimer le contour sur focus */
+}
+
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -24,12 +26,18 @@
     height: 64px;
     background-color: lightgray;
     border: 1px solid #ddd;
+}
+
 .popup {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup button {
+    margin-top: 10px;
 }
 
 @keyframes spriteAnimation {
@@ -62,6 +70,4 @@
 
 #title {
     text-align: center;
-.popup button {
-    margin-top: 10px;
 }

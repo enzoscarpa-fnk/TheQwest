@@ -9,9 +9,18 @@ namespace JDR.Models
         public int MaxLife { get; set; }
         public int CurrentLife { get; set; }
 
+        // Constructeur
+        public Player(string name, int maxLife)
+        {
+            Name = name;
+            MaxLife = maxLife;
+            CurrentLife = maxLife;
+        }
+
         public void Move(string direction, int gridSize)
         {
             switch (direction)
+            {
                 case "Up":
                     if (Y > 0) Y--;
                     break;
