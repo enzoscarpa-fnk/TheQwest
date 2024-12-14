@@ -71,3 +71,15 @@
 #title {
     text-align: center;
 }
+
+.monster {
+    background-color: red;
+}
+
+.fountain {
+    background-color: lightblue;
+    background-image: url('/images/fountain.gif');
+    background-repeat: no-repeat;
+    background-size: 50px;
+    background-position: center;
+}

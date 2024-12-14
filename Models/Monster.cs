@@ -1,19 +1,14 @@
 namespace JDR.Models
 {
-    public class Monster
+    public class Monster(int x, int y)
     {
-        public string Name { get; set; }
-
-        // Constructeur
-        public Monster(string name)
-        {
-            Name = name;
-        }
+        public int X { get; set; } = x;
+        public int Y { get; set; } = y;
 
         // Méthode pour attaquer le joueur, le monstre inflige entre 10% et 50% des PV du joueur
-        public void Attack(Player player)
+        public static void Attack(Player player)
         {
-            Random random = new Random();
+            Random random = new();
             int damagePercentage = random.Next(10, 51); // Aléatoire entre 10% et 50%
             int damageAmount = player.MaxLife * damagePercentage / 100;
 
