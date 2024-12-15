@@ -110,28 +110,11 @@ code {
     color: #c02d76;
 }
 
-#fight, #hero-setup {
-    margin: 10px 10px 20px 10px;
-}
-
-#fight h3 {
-    margin-bottom: 10px;
-}
-
-.players-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.player, .opponent {
-    width: 42%;
-    padding: 10px;
-    border: 2px solid #f00;
-}
-
 #console {
     width: 100%;
-    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .console {
@@ -148,8 +131,4 @@ code {
 
 .log-entry {
     white-space: pre-wrap;
-}
-
-.btn-danger {
-    margin: 5px;
 }
