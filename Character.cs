@@ -4,37 +4,35 @@ public abstract class Character
 {
     public string CharacterName { get; set; }
     public int Level { get; set; }
-    private bool IsDead { get; set; }
+    internal bool IsDead { get; set; }
     public int HealthValue { get; set; }
     public int EnergyValue { get; set; }
     public int AttackValue { get; set; }
     public int ArmorValue { get; set; }
     public double CriticalHitFactor { get; set; }
     
-    public Character(string characterName, bool isDead, int energyValue, int armorValue, int level, double criticalHitFactor = 2)
+    public Character(
+        string characterName,
+        bool isDead,
+        double criticalHitFactor = 1.72
+        )
     {
         CharacterName = characterName;
-        Level = level;
         IsDead = isDead;
-        EnergyValue = energyValue;
-        ArmorValue = armorValue;
         CriticalHitFactor = criticalHitFactor;
     }
-
-    public void Attack(Character target)
+    
+    // The base attack
+    public virtual void Cast_BaseAttack(Character target)
     {
-        if (target.IsDead || EnergyValue <= 0)
-            return;
-        
-        var damageDealt = AttackValue - target.ArmorValue;
-        Console.WriteLine($"{CharacterName} dealt {damageDealt} damage to {target.CharacterName}.");
-        target.TakeDamage(damageDealt, this);
     }
 
     public void TakeDamage(int damage, Character attacker)
     {
-        Console.WriteLine($"{CharacterName} took {damage} damage from {attacker.CharacterName}.");
         HealthValue -= damage;
+        
+        Console.WriteLine($"{CharacterName} took {damage} damage from {attacker.CharacterName}.");
+        
         if (HealthValue <= 0)
         {
             Die(attacker);

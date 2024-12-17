@@ -10,7 +10,7 @@
     <div id="left-panel">
         <!-- Hero setup component -->
         <div id="hero-setup">
-            <h3>Hero setup</h3>
+            <h4>Hero setup [NW]</h4>
             <label for="heroName">Hero Name:</label>
             <input id="heroName" type="text" />
 
@@ -20,25 +20,27 @@
                 <option value="mage">Mage</option>
                 <option value="rogue">Rogue</option>
             </select>
+
+            <button class="btn btn-danger">New character</button> <!-- Needs @onclick="CreateHero" integration -->
         </div>
 
         <!-- Hero stats component -->
         <div id="hero-stats">
-            <h3>Hero Stats</h3>
+            <h4>Hero Stats [NW]</h4>
             <p>[Hero stats summary]</p>
         </div>
 
         <!-- Hero inventory component -->
         <div id="hero-inventory">
-            <h3>Hero Inventory</h3>
+            <h4>Hero Inventory [NW]</h4>
             <p>[Inventory details]</p>
         </div>
     </div>
 
     <!-- Central panel : Map of the game -->
     <div id="center-panel">
-        <h4 id="title">@player.Name : @player.CurrentLife / @player.MaxLife</h4>
-
+        <h4 id="center-panel-map">Map [W]</h4>
+        
         <div
             class="grid"
             tabindex="0"
@@ -60,29 +62,32 @@
                 }
             }
         </div>
+        
+        <h4 id="center-panel-characterstats">@player.Name : @player.CurrentLife / @player.MaxLife</h4>
     </div>
 
     <!-- Right panel : Fight interface -->
     <div id="right-panel">
         <div id="fight">
-            <h3>Fight</h3>
+            <h4>Fight [W]</h4>
             <div class="players-container">
                 <div class="player">
                     <p><strong>Player's name:</strong> @hero?.CharacterName</p>
                     <p><strong>Level:</strong> @hero?.Level</p>
                     <p><strong>Experience:</strong> @hero?.ExperienceValue / @hero?.ExperienceToNextLevel</p>
                     <p><strong>Health:</strong> @hero?.HealthValue HP</p>
+                    <p><strong>Armor:</strong> @hero?.ArmorValue Armor</p>
                     <p><strong>Energy:</strong> @hero?.EnergyValue Energy</p>
-                    <p><strong>Attack:</strong> @hero?.AttackValue Damage</p>
-                    <button class="btn btn-danger" @onclick="HeroAttack">P2 Attack P1</button>
+                    <p><strong>Attack:</strong> @hero?.AttackValue Dmg</p>
+                    <button class="btn btn-danger" @onclick="HeroAttack">Meteor Blast</button>
                 </div>
                 <div class="opponent">
                     <p><strong>Foe's name:</strong> @foe?.CharacterName</p>
                     <p><strong>Level:</strong> @foe?.Level</p>
                     <p><strong>LevelRollResult:</strong> @foe?.RollResult</p>
                     <p><strong>Health:</strong> @foe?.HealthValue HP</p>
-                    <p><strong>Energy:</strong> @foe?.EnergyValue Energy</p>
-                    <button class="btn btn-danger" @onclick="FoeAttack">Foe Attack P1</button>
+                    <p><strong>Attack:</strong> @foe?.AttackValue Dmg</p>
+                    <button class="btn btn-danger" @onclick="FoeAttack">Base Attack</button>
                 </div>
             </div>
         </div>
@@ -127,7 +132,10 @@
     {
         if (hero != null && foe != null)
         {
-            hero.Attack(foe);
+            // hero.Cast_BaseAttack(foe);
+            // hero.Cast_FrostSpikes(foe);
+            // hero.Cast_ArcaneShield(StateHasChanged);
+            hero.Cast_MeteorBlast(foe);
             StateHasChanged();
         }
     }
@@ -136,7 +144,7 @@
     {
         if (foe != null && hero != null)
         {
-            foe.Attack(hero);
+            foe.Cast_BaseAttack(hero);
             StateHasChanged();
         }
     }
@@ -238,10 +246,10 @@
         GenerateEntities(); // Initialize the map with foes and life fountains
         
         // Initialize player
-        hero = new HeroMage("Ariana", false, 40, 2, levelProgression, 1, 0);
+        hero = new HeroMage("Ariana", levelProgression);
         
         // Initialize foe
-        foe = new FoeGoblin("Goblin", false, 36, 52, 4, 3);
+        foe = new FoeGoblin();
         foe.CalculateLevel(hero.Level);
     }
 }

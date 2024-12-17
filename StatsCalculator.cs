@@ -1,6 +1,6 @@
 namespace JDR;
 
-public class HeroStatsCalculator
+public class StatsCalculator
 {
     public static int CalculateStat(int baseValue, double factor, int level, int bonusInterval = 4, int bonusAmount = 12)
     {

@@ -2,7 +2,7 @@ namespace JDR;
 
 public class Hero : Character
 {
-    public int ExperienceValue { get; private set; }
+    public int ExperienceValue { get; protected set; }
     private LevelProgression levelProgression;
     public int ExperienceToNextLevel => levelProgression.ExperienceToLevelUp(Level);
     public event Action? OnLevelUp;
@@ -16,9 +16,12 @@ public class Hero : Character
     public int CriticalChance { get; set; }
     public int HasteRating { get; set; }
     public int DodgeRating { get; set; }
-    public Hero(string characterName, bool isDead, int energyValue, int armorValue, LevelProgression progression, int level = 1, int experienceValue = 0) : base(characterName, isDead, energyValue, armorValue, level)
+    public Hero(
+        string characterName,
+        LevelProgression progression,
+        bool isDead = false
+        ) : base(characterName, isDead)
     {
-        ExperienceValue = experienceValue;
         levelProgression = progression;
     }
 
