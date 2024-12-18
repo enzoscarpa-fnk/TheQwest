@@ -8,89 +8,88 @@
     
     <!-- Left panel: Hero setup, stats and inventory -->
     <div id="left-panel">
-        <!-- Hero setup component -->
-        <div id="hero-setup">
-            <h4>Hero setup [NW]</h4>
-            <label for="heroName">Hero Name:</label>
-            <input id="heroName" type="text" />
-
-            <label for="heroClass">Hero Class:</label>
-            <select id="heroClass">
-                <option value="warrior">Warrior</option>
-                <option value="mage">Mage</option>
-                <option value="rogue">Rogue</option>
-            </select>
-
-            <button class="btn btn-danger">New character</button> <!-- Needs @onclick="CreateHero" integration -->
-        </div>
-
         <!-- Hero stats component -->
         <div id="hero-stats">
-            <h4>Hero Stats [NW]</h4>
-            <p>[Hero stats summary]</p>
+            <h4>Hero Stats</h4>
+            <div class="player">
+                <p><strong>Player's name:</strong> @hero?.CharacterName</p>
+                <p><strong>Level:</strong> @hero?.Level</p>
+                <p><strong>XP:</strong> @hero?.ExperienceValue / @hero?.ExperienceToNextLevel</p>
+                <p><strong>Health:</strong> @hero?.CurrentHealthValue / @hero?.MaxHealthValue</p>
+                <p><strong>Mana:</strong> @hero?.EnergyValue / @hero?.MaxEnergyValue</p>
+                <p><strong>Armor:</strong> @hero?.ArmorValue</p>
+                <p><strong>Attack:</strong> @hero?.AttackValue</p>
+                <p><strong>Bonus Dmg:</strong> + @hero?.BonusDamage</p>
+                <p><strong>Crit Chance:</strong> @hero?.AttackValue%</p>
+                <p><strong>Haste:</strong> @hero?.AttackValue%</p>
+                <p><strong>Dodge:</strong> @hero?.AttackValue%</p>
+            </div>
         </div>
 
         <!-- Hero inventory component -->
         <div id="hero-inventory">
-            <h4>Hero Inventory [NW]</h4>
+            <h4>Hero Inventory</h4>
             <p>[Inventory details]</p>
         </div>
     </div>
 
     <!-- Central panel : Map of the game -->
     <div id="center-panel">
-        <h4 id="center-panel-map">Map [W]</h4>
-        
-        <div
-            class="grid"
-            tabindex="0"
-            @onkeydown="HandleKeyDown"
-            @ref="gridRef"
-            autofocus>
-            @for (int row = 0; row < GridSize; row++)
-            {
-                @for (int col = 0; col < GridSize; col++)
+        <h4 id="center-panel-map">Map</h4>
+
+        <div style="position: relative;">
+            <div
+                class="grid"
+                tabindex="0"
+                @onkeydown="HandleKeyDown"
+                @ref="gridRef"
+                autofocus>
+                @for (int row = 0; row < GridSize; row++)
                 {
-                    var cellContent = "";
-                    if (row == player.Y && col == player.X)
-                        cellContent = $"sprite {player.FacingDirection}";
-                    else if (monsters.Any(m => m.X == col && m.Y == row))
-                        cellContent = "monster";
-                    else if (fountains.Any(m => m.X == col && m.Y == row))
-                        cellContent = "fountain";
-                    <div class="cell @cellContent"></div>
+                    @for (int col = 0; col < GridSize; col++)
+                    {
+                        var cellContent = "";
+                        if (row == hero.Y && col == hero.X)
+                            cellContent = $"sprite {hero.FacingDirection}";
+                        else if (monsters.Any(m => m.X == col && m.Y == row))
+                            cellContent = "monster";
+                        else if (fountains.Any(m => m.X == col && m.Y == row))
+                            cellContent = "fountain";
+                        <div class="cell @cellContent"></div>
+                    }
                 }
+            </div>
+
+            @if (isFighting)
+            {
+                <div class="grid-overlay"></div> <!-- Grays out the map when hero is fighting -->
             }
         </div>
-        
-        <h4 id="center-panel-characterstats">@player.Name : @player.CurrentLife / @player.MaxLife</h4>
     </div>
 
     <!-- Right panel : Fight interface -->
     <div id="right-panel">
-        <div id="fight">
-            <h4>Fight [W]</h4>
-            <div class="players-container">
-                <div class="player">
-                    <p><strong>Player's name:</strong> @hero?.CharacterName</p>
-                    <p><strong>Level:</strong> @hero?.Level</p>
-                    <p><strong>Experience:</strong> @hero?.ExperienceValue / @hero?.ExperienceToNextLevel</p>
-                    <p><strong>Health:</strong> @hero?.HealthValue HP</p>
-                    <p><strong>Armor:</strong> @hero?.ArmorValue Armor</p>
-                    <p><strong>Energy:</strong> @hero?.EnergyValue Energy</p>
-                    <p><strong>Attack:</strong> @hero?.AttackValue Dmg</p>
-                    <button class="btn btn-danger" @onclick="HeroAttack">Meteor Blast</button>
-                </div>
-                <div class="opponent">
-                    <p><strong>Foe's name:</strong> @foe?.CharacterName</p>
-                    <p><strong>Level:</strong> @foe?.Level</p>
-                    <p><strong>LevelRollResult:</strong> @foe?.RollResult</p>
-                    <p><strong>Health:</strong> @foe?.HealthValue HP</p>
-                    <p><strong>Attack:</strong> @foe?.AttackValue Dmg</p>
-                    <button class="btn btn-danger" @onclick="FoeAttack">Base Attack</button>
+        @if (isFighting)
+        {
+            <div id="fight">
+                <h4>Fight</h4>
+                <div class="players-container">
+                    <div class="player">
+                        <p><strong>Player's name:</strong> @hero?.CharacterName</p>
+                        <p><strong>Level:</strong> @hero?.Level</p>
+                        <p><strong>Health:</strong> @hero?.CurrentHealthValue / @hero?.MaxHealthValue HP</p>
+                        <p><strong>Energy:</strong> @hero?.EnergyValue / @hero.MaxEnergyValue Mana</p>
+                        <button class="btn btn-danger" @onclick="HeroAttack">Meteor Blast</button>
+                    </div>
+                    <div class="opponent">
+                        <p><strong>Monster's name:</strong> @monster?.CharacterName</p>
+                        <p><strong>Level:</strong> @monster?.Level</p>
+                        <p><strong>Health:</strong> @monster?.CurrentHealthValue / @monster?.MaxHealthValue HP</p>
+                        <button class="btn btn-danger" @onclick="MonsterAttack">Base Attack</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -113,13 +112,13 @@
 @code {
     // Fight component properties
     private readonly LevelProgression levelProgression = new();
-    private HeroMage? hero;
-    private FoeGoblin? foe;
+    private HeroMage hero;
+    private MonsterGoblin? monster;
+    private bool isFighting = false;
     
     // Map component properties
     private const int GridSize = 10;
     private ElementReference gridRef;
-    private Player player = new Player("John Doe", 100);
     private bool isGameOver = false;
     private List<Monster> monsters = new();
     private List<LifeFountain> fountains = new();
@@ -130,23 +129,46 @@
     // Fight component methods
     private void HeroAttack()
     {
-        if (hero != null && foe != null)
+        if (hero != null && monster != null)
         {
-            // hero.Cast_BaseAttack(foe);
-            // hero.Cast_FrostSpikes(foe);
+            // hero.Cast_BaseAttack(monster, RestartGame);
+            // hero.Cast_FrostSpikes(monster, RestartGame);
             // hero.Cast_ArcaneShield(StateHasChanged);
-            hero.Cast_MeteorBlast(foe);
+            hero.Cast_MeteorBlast(monster, RestartGame);
+            
+            if (monster.CurrentHealthValue <= 0)
+            {
+                EndFight(); // Ends fight when monster is killed
+            }
+            
+            StateHasChanged();
+        }
+    }
+
+    private void MonsterAttack()
+    {
+        if (monster != null && hero != null)
+        {
+            monster.Cast_BaseAttack(hero, RestartGame);
             StateHasChanged();
         }
     }
     
-    private void FoeAttack()
+    private void EndFight()
     {
-        if (foe != null && hero != null)
+        // Remove actual monster from list
+        if (monster != null)
         {
-            foe.Cast_BaseAttack(hero);
-            StateHasChanged();
+            var monsterToRemove = monsters.FirstOrDefault(m => m.X == hero.X && m.Y == hero.Y);
+            if (monsterToRemove != null)
+            {
+                monsters.Remove(monsterToRemove);
+            }
         }
+        
+        isFighting = false; // Turns off combat UI
+        monster = null;         // Reinitialize monster
+        StateHasChanged();  // Updates UI
     }
     
     // Map component methods
@@ -154,14 +176,14 @@
     // Generates entities at random location on the map
     private void GenerateEntities()
     {
-        monsters.Clear(); // Clears foes list
+        monsters.Clear(); // Clears monsters list
         fountains.Clear(); // Clears fountains list
 
-        // Generates 5 foes at random location
+        // Generates 5 monsters at random location
         for (int i = 0; i < 5; i++)
         {
             (int x, int y) = GetRandomPosition();
-            monsters.Add(new Monster(x, y));
+            monsters.Add(new MonsterGoblin(x, y));
         }
 
         // Generates 3 fountains at random location
@@ -181,19 +203,21 @@
         } while (
             monsters.Any(m => m.X == position.X && m.Y == position.Y) ||
             fountains.Any(f => f.X == position.X && f.Y == position.Y) ||
-            (position.X == player.X && position.Y == player.Y));
+            (position.X == hero.X && position.Y == hero.Y));
         return position;
     }
 
     private async void HandleKeyDown(KeyboardEventArgs e)
     {
+        if (isFighting) return; // Player stays still on the map when fighting
+        
         var now = DateTime.Now;
         if (now - lastMovementTime < debounceDelay) return; // Ignores if too quick
 
         if (e.Key.StartsWith("Arrow"))
         {
             string direction = e.Key.Replace("Arrow", ""); // Extract "Up", "Down", "Left", or "Right"
-            player.Move(direction, GridSize);
+            hero.Move(direction, GridSize);
             CheckInteractions();    
             lastMovementTime = now; // Updates th last movement time
             await Task.Delay(50); // Delay before triggering new update
@@ -204,29 +228,36 @@
     // Checks interactions of hero with entities on map
     private void CheckInteractions()
     {
-        var playerPosition = (player.X, player.Y);
+        var playerPosition = (hero.X, hero.Y);
 
-        // Interaction with a foe
+        // Interaction with a monster
         var monster = monsters.FirstOrDefault(m => (m.X, m.Y) == playerPosition);
         if (monster != null)
         {
-            Monster.Attack(player);
-            monsters.Remove(monster);
-            if (player.CurrentLife <= 0) { isGameOver = true; }
+            // Create new monster
+            this.monster = new MonsterGoblin(hero.X, hero.Y); // Pass hero's X, Y coordinates
+            this.monster.CalculateLevel(hero.Level); // CalculateLevel adjusts monster's level based on hero's level
+            isFighting = true; // Turns on combat UI
+
+            if (hero.CurrentHealthValue <= 0)
+            {
+                isGameOver = true;
+            }
         }
 
         // Interaction with a fountain
         var fountain = fountains.FirstOrDefault(f => (f.X, f.Y) == playerPosition);
         if (fountain != null)
         {
-            LifeFountain.HealPlayer(player);
+            LifeFountain.HealPlayer(hero);
             fountains.Remove(fountain);
         }
     }
-    
+
     private void RestartGame()
     {
-        player = new Player("John Doe", 100);
+        isFighting = false;
+        hero = new HeroMage("Ariana", levelProgression);
         GenerateEntities();
         isGameOver = false; // Turns off the game over popup
     }
@@ -242,14 +273,10 @@
     // OnInitialized method
     protected override void OnInitialized()
     {
-        // Initialize map
-        GenerateEntities(); // Initialize the map with foes and life fountains
-        
-        // Initialize player
+        // Initialize hero
         hero = new HeroMage("Ariana", levelProgression);
         
-        // Initialize foe
-        foe = new FoeGoblin();
-        foe.CalculateLevel(hero.Level);
+        // Initialize map
+        GenerateEntities(); // Initialize the map with foes and life fountains
     }
 }
