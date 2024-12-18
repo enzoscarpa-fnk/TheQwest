@@ -1,11 +1,97 @@
+@media screen and (max-width: 768px) {
+    #game-container {
+        flex-direction: column;
+    }
+
+    #left-panel, #center-panel, #right-panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+    
+    #center-panel {
+        margin: 10px;
+    }
+
+    .grid {
+        max-width: 100%;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Main container */
+#game-container {
+    display: flex;
+    width: 100%;
+    max-width: 1280px;
+    margin: 20px auto;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+/* Left panel */
+#left-panel {
+    width: 20%;
+    min-width: 200px;
+    max-width: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Center panel */
+#center-panel {
+    width: 55%;
+    min-width: 658px;
+    max-width: 55%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    position: relative;
+}
+
+/* Right panel */
+#right-panel {
+    width: 25%;
+    min-width: 200px;
+    max-width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    overflow: hidden;
+}
+
 .grid {
     display: grid;
     grid-template-rows: repeat(10, 64px);
     grid-template-columns: repeat(10, 64px);
     gap: 2px;
-    margin: auto;
-    width: 658px;
-    outline: 2px solid black; /* Supprimer le contour sur focus */
+    width: 100%;
+    max-width: 658px;
+    outline: 2px solid black; /* Remove outline on focus */
+    margin: 0 auto;
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* 60% transparency black, modify if too light or too dark */
+    pointer-events: none; /* Let events play */
+    z-index: 10; /* Place overlay over the map */
 }
 
 .popup-overlay {
@@ -48,15 +134,15 @@
     to {
         background-position: -384px;
     }
-    /* 64px * 6 frames */
+    /* 64px x 6 frames */
 }
 
 .sprite {
-    width: 64px; /* largeur d'une frame */
-    height: 64px; /* hauteur d'une frame */
-    background-image: url('/images/Run-Sheet.png');
+    width: 64px; /* width of frame */
+    height: 64px; /* height of frame */
+    background-image: url('./images/Run-Sheet.png');
     background-repeat: no-repeat;
-    animation: spriteAnimation 1s steps(6) infinite;
+    animation: spriteAnimation 0.8s steps(6) infinite;
     transform-origin: center center;
 }
 
@@ -68,18 +154,54 @@
     transform: scaleX(-1);
 }
 
-#title {
+#center-panel-map {
     text-align: center;
+    width: 100%;
+    margin: 0 0 10px;
+}
+
+#center-panel-characterstats {
+    text-align: center;
+    width: 100%;
+    margin: 10px;
 }
 
 .monster {
-    background-color: red;
+    background-color: #d9534f;
 }
 
 .fountain {
     background-color: lightblue;
-    background-image: url('/images/fountain.gif');
+    background-image: url('./images/fountain.gif');
     background-repeat: no-repeat;
     background-size: 50px;
     background-position: center;
+}
+
+#fight, #hero-setup, #hero-stats, #hero-inventory {
+    margin: 10px;
+    padding: 10px;
+}
+
+#hero-setup h4, #hero-stats h4, #hero-inventory h4, #fight h4 {
+    margin: 10px 0 10px;
+}
+
+.players-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.player, .opponent {
+    padding: 10px;
+    border: 2px solid #f00;
+}
+
+.btn-danger {
+    margin: 5px;
+}
+
+button:focus {
+    outline: 2px solid #0063d6;
 }

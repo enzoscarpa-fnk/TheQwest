@@ -2,21 +2,28 @@
 
 namespace JDR.Models
 {
-    public class LifeFountain(int x, int y)
+    public class LifeFountain
     {
-        public int X { get; set; } = x;
-        public int Y { get; set; } = y;
-
-        // Méthode pour régénérer la vie du joueur lorsqu'il s'en approche
-        public static void HealPlayer(Player player)
+        public int X { get; set; }
+        public int Y { get; set; }
+        
+        public LifeFountain(int x, int y)
         {
-            // Le pourcentage entre 25% et 75% de la vie maximale du joueur
-            Random random = new();
-            int healPercentage = random.Next(25, 76); // Aléatoire entre 25 et 75
-            int healAmount = player.MaxLife * healPercentage / 100;
+            X = x;
+            Y = y;
+        }
 
-            player.Heal(healAmount);
-            Console.WriteLine($"La fontaine vous heal ! Vous gagnez {healAmount} HP.");
+        // Heals the Hero when it touches the fountain
+        public static void HealPlayer(Hero hero)
+        {
+            // Calculates an amount from range 25% ~ 75% of Hero's MaxHealthValue
+            Random random = new();
+            int healPercentage = random.Next(25, 76); // random of 25% ~ 75%
+            int healAmount = hero.MaxHealthValue * healPercentage / 100;
+
+            Console.WriteLine($"You touched a Life Fountain ! ");
+            hero.Heal(healAmount);
+            hero.EnergyValue = hero.MaxEnergyValue;
         }
     }
 }
