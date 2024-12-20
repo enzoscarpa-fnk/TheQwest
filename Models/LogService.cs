@@ -12,7 +12,10 @@ public class LogService
 
     public void Log(string message)
     {
-        _logs.Add(message);
+        string timestamp = DateTime.Now.ToString("HH:mm:ss");  // Hour:Minute:Second format
+        string logMessage = $"[{timestamp}] {message}";  // Adds timestamp to message
+
+        _logs.Add(logMessage);
         
         if (_logs.Count > MaxLogCount)
         {
