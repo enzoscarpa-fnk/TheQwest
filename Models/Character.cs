@@ -34,7 +34,7 @@ namespace JDR.Models
         }
         
         // The base attack
-        public virtual void Cast_BaseAttack(Character target, Action restartGameAction)
+        public virtual void Cast_BaseAttack(Character target, Action gameOverAction)
         {
             if (target.IsDead)
                 return;
@@ -42,7 +42,7 @@ namespace JDR.Models
             int baseDamage = AttackValue - target.ArmorValue;
             int damage = baseDamage <= 0 ? 0 : baseDamage;
 
-            target.TakeDamage(damage, this, restartGameAction);
+            target.TakeDamage(damage, this, gameOverAction);
         }
         
         public void Heal(int heal)
@@ -54,19 +54,17 @@ namespace JDR.Models
             Console.WriteLine($"You healed of {healAmount} HP.");
         }
     
-        public void TakeDamage(int damage, Character attacker, Action restartGameAction)
+        public void TakeDamage(int damage, Character attacker, Action gameOverAction)
         {
             CurrentHealthValue -= damage;
             
-            Console.WriteLine($"{CharacterName} took {damage} damage from {attacker.CharacterName}.");
-            
             if (CurrentHealthValue <= 0)
             {
-                Die(attacker, restartGameAction);
+                Die(attacker, gameOverAction);
             }
         }
     
-        public void Die(Character attacker, Action restartGameAction)
+        public void Die(Character attacker, Action gameOverAction)
         {
             CurrentHealthValue = 0;
             IsDead = true;
@@ -79,7 +77,7 @@ namespace JDR.Models
             
             if (attacker is Monster)
             {
-                restartGameAction.Invoke();
+                gameOverAction.Invoke();
             }
         }
     }

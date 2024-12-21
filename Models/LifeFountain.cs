@@ -21,7 +21,7 @@ namespace JDR.Models
             int healPercentage = random.Next(25, 76); // random of 25% ~ 75%
             int healAmount = hero.MaxHealthValue * healPercentage / 100;
 
-            Console.WriteLine($"You touched a Life Fountain ! ");
+            Console.WriteLine($"You touched a Life Fountain ! All of your mana has been restored ! ");
             hero.Heal(healAmount);
             hero.EnergyValue = hero.MaxEnergyValue;
         }

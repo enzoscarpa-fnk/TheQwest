@@ -66,7 +66,7 @@ namespace JDR.Models
         public void GainExperience(int amount, Character target)
         {
             ExperienceValue += amount;
-            Console.WriteLine($"{CharacterName} received {amount} experience points from killing {target.CharacterName}.");
+            Console.WriteLine($"{CharacterName} received {amount} experience points from killing lvl {target.Level} {target.CharacterName}.");
 
             while (levelProgression.CanLevelUp(Level, ExperienceValue))
             {
