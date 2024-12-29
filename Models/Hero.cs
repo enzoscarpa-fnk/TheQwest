@@ -107,7 +107,7 @@ namespace JDR.Models
                 "mage" => new Mage(name, progression),
                 // "warrior" => new Warrior(name, progression),
                 // "archer" => new Archer(name, progression),
-                _ => throw new ArgumentException("Type de héros invalide !")
+                _ => throw new ArgumentException("Invalid hero type !")
             };
         }
     }
