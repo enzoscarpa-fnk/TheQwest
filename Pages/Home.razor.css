@@ -31,7 +31,7 @@ body {
 #game-container {
     display: flex;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1500px;
     margin: 20px auto;
     box-sizing: border-box;
     flex-wrap: wrap;
@@ -40,7 +40,7 @@ body {
 /* Left panel */
 #left-panel {
     width: 20%;
-    min-width: 200px;
+    min-width: 260px;
     max-width: 20%;
     display: flex;
     flex-direction: column;

@@ -6,20 +6,19 @@ namespace JDR.Models
         public MonsterGoblin(
             int x,
             int y,
+            int heroLevel,
             string characterName = "Goblin",
-            int id = 0,
-            bool isDead = false,
             int armorValue = 4,
             int criticalChance = 2,
-            int hasteRating = 5,
+            int hasteRating = 5,    
             int dodgeRating = 5
-            ) : base(x, y, characterName, isDead)
+            ) : base(x, y, characterName)
         {
-            Id = id;
             ArmorValue = armorValue;
             CriticalChance = criticalChance;
             HasteRating = hasteRating;
             DodgeRating = dodgeRating;
+            CalculateLevel(heroLevel);
         }
 
         // Initializes stats
@@ -37,58 +36,38 @@ namespace JDR.Models
         public void CalculateLevel(int heroLevel)
         {
             RollResult = rand.Next(1, 101);
-
-            if (heroLevel > 1)
+            if (RollResult <= 15)
             {
-                if (RollResult <= 15)
-                {
-                    Level = heroLevel - 1;
-                }
-                else if (RollResult <= 65)
-                {
-                    Level = heroLevel;
-                }
-                else if (RollResult <= 92)
-                {
-                    Level = heroLevel + 1;
-                }
-                else
-                {
-                    Level = heroLevel + 2;
-                }
+                Level = heroLevel == 1 ? heroLevel : heroLevel - 1;
             }
-            else
+            else if (RollResult <= 65)
             {
                 Level = heroLevel;
             }
-            
+            else if (RollResult <= 92)
+            {
+                Level = heroLevel + 1;
+            }
+            else
+            {
+                Level = heroLevel + 2;
+            }
             InitializeStats();
         }
         
-        // Decides if the attack is a critical hit
-        public int CriticalHit(int baseDamage, out bool isCritical)
-        {
-            RollResult = rand.Next(1, 101);
-            isCritical = RollResult <= CriticalChance; // Return true if the roll result is in the range of the CriticalChance value
-            int damage = isCritical ? (int)Math.Round(baseDamage * CriticalHitFactor) : baseDamage; // if result is true then crit damage, else base damage
-            
-            return damage;
-        }
-        
         // The base attack
-        public override void Cast_BaseAttack(Character target, Action restartGameAction)
+        public override void BaseAttack(Character target, Action restartGameAction)
         {
-            if (target.IsDead)
+            if (target.CurrentHealthValue == 0)
                 return;
             
             int baseDamage = AttackValue - target.ArmorValue;
             int damage = baseDamage <= 0 ? 0 : baseDamage;
 
-            bool isCritical;
-            int calculatedDamage = CriticalHit(damage, out isCritical);
+            int calculatedDamage = CriticalHit(damage, out bool isCritical);
             
             string message = isCritical ? "Critical hit! " : "";
-            message += $"Base attack from {CharacterName} dealt {calculatedDamage} damage to {target.CharacterName}.";
+            message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
 
             Console.WriteLine(message);
             
