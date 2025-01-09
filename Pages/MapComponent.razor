@@ -7,12 +7,22 @@
     @onkeydown="HandleKeyDown"
     @ref="gridRef"
     autofocus>
-    @for (int row = 0; row < map.RowCount; row++)
+    @if (map != null)
     {
-        @for (int col = 0; col < map.ColCount; col++)
+        @try
         {
-            var cellContent = map.RenderCell(col, row);
-            <div class="cell @cellContent"></div>
+            @for (int row = 0; row < map.RowCount; row++)
+            {
+                @for (int col = 0; col < map.ColCount; col++)
+                {
+                    var cellContent = map.RenderCell(col, row);
+                    <div class="cell @cellContent"></div>
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            <p>Error rendering map: @ex.Message</p>
         }
     }
 </div>
@@ -35,11 +45,28 @@
 
     protected override void OnInitialized()
     {
-        if (HeroCreated)
+        try
         {
-            map = new Map(10, 10, Hero); // 10x10 Grid
-            monsters = map.Monsters;
-            fountains = map.Fountains;
+            if (HeroCreated)
+            {
+                map = new Map(10, 10, Hero); // 10x10 Grid
+                monsters = map.Monsters;
+                fountains = map.Fountains;
+
+                Console.WriteLine("Map successfully initialized.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during map initialization: {ex.Message}");
+        }
+    }
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine($"Map dimensions: {map?.RowCount} rows x {map?.ColCount} cols");
         }
     }
     

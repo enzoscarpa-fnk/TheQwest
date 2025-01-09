@@ -66,17 +66,20 @@
 
     <!-- Central panel : Map of the game -->
     <div id="center-panel">
-        @if (heroCreated && hero != null)
-        {
-            <div style="position: relative;">
-                <MapComponent @ref="mapComponent" Hero="hero" HeroCreated="heroCreated" OnFightStateChange="HandleFightStateChange" OnFight="HandleFight" IsFighting="(() => isFighting)" />
+        <!-- Central panel : Map of the game -->
+        <div id="center-panel">
+            @if (heroCreated && hero != null)
+            {
+                <div class="grid" style="position: relative;">
+                    <MapComponent @ref="mapComponent" Hero="hero" HeroCreated="heroCreated" OnFightStateChange="HandleFightStateChange" OnFight="HandleFight" IsFighting="(() => isFighting)" />
 
-                @if (isFighting)
-                {
-                    <div class="grid-overlay"></div> <!-- Grays out the map when hero is fighting -->
-                }
-            </div>
-        }
+                    @if (isFighting)
+                    {
+                        <div class="grid-overlay"></div> <!-- Grays out the map when hero is fighting -->
+                    }
+                </div>
+            }
+        </div>
     </div>
 
     <!-- Right panel : Fight interface -->
@@ -183,6 +186,12 @@
         }
     }
 
+    private void StartGame()
+    {
+        hero = Hero.CreateHero(CharacterClass, CharacterName);
+        heroCreated = true;
+    }
+    
     private void GameOver()
     {
         isGameOver = true;
@@ -194,12 +203,6 @@
         heroCreated = false;
         isFighting = false;
         isGameOver = false; // Turns off the game over popup
-    }
-
-    private void StartGame()
-    {
-        hero = Hero.CreateHero(CharacterClass, CharacterName);
-        heroCreated = true;
     }
 
     // OnInitialized method
