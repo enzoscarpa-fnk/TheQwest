@@ -26,7 +26,7 @@ namespace JDR.Models
         }
         
         // Makes the Hero move on the map
-        public void Move(string direction, int gridSize)
+        public void Move(string direction, int rowCount, int colCount)
         {
             switch (direction)
             {
@@ -34,14 +34,14 @@ namespace JDR.Models
                     if (Y > 0) Y--;
                     break;
                 case "Down":
-                    if (Y < gridSize - 1) Y++;
+                    if (Y < rowCount - 1) Y++;
                     break;
                 case "Left":
                     if (X > 0) X--;
                     FacingDirection = Direction.Left;
                     break;
                 case "Right":
-                    if (X < gridSize - 1) X++;
+                    if (X < colCount - 1) X++;
                     FacingDirection = Direction.Right;
                     break;
             }
