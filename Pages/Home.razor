@@ -82,7 +82,17 @@
                             if (row == hero.Y && col == hero.X)
                                 cellContent = $"sprite {hero.FacingDirection}";
                             else if (monsters.Any(m => m.X == col && m.Y == row))
-                                cellContent = "monster";
+                            {
+                                var monster = monsters.First(m => m.X == col && m.Y == row); // Trouver le monstre correspondant
+                                if (monster.Name == "Dragon")
+                                {
+                                    cellContent = "boss"; // Case contenant un dragon
+                                }
+                                else
+                                {
+                                    cellContent = "monster"; // Autres types de monstres
+                                }
+                            }
                             else if (fountains.Any(m => m.X == col && m.Y == row))
                                 cellContent = "fountain";
                             <div class="cell @cellContent"></div>
@@ -232,11 +242,18 @@
             monsters.Add(new MonsterGoblin(x, y, hero.Level));
         }
 
-        // Generates 3 fountains at random location
-        for (int i = 0; i < 3; i++)
+        // Generates 4 fountains at random location
+        for (int i = 0; i < 4; i++)
         {
             (int x, int y) = GetRandomPosition();
             fountains.Add(new LifeFountain(x, y));
+        }
+
+        // Generates 1 boss
+        for (int i = 0; i < 1; i++)
+        {
+            (int x, int y) = GetRandomPosition();
+            monsters.Add(new Boss(x, y, hero.Level+2));
         }
     }
 
