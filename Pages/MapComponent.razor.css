@@ -48,6 +48,10 @@
     background-color: #d9534f;
 }
 
+.boss {
+    background-color: #444444;
+}
+
 .fountain {
     background-color: lightblue;
     background-image: url('./images/fountain.gif');

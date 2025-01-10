@@ -35,11 +35,18 @@ namespace JDR.Models
                 Monsters.Add(new MonsterGoblin(x, y, hero.Level));
             }
 
-            // Generates 3 fountains at random location
-            for (int i = 0; i < 3; i++)
+            // Generates 4 fountains at random location
+            for (int i = 0; i < 4; i++)
             {
                 (int x, int y) = GetRandomPosition();
                 Fountains.Add(new LifeFountain(x, y));
+            }
+            
+            // Generates 1 boss at random location
+            for (int i = 0; i < 1; i++)
+            {
+                (int x, int y) = GetRandomPosition();
+                Monsters.Add(new Boss(x, y, hero.Level+2));
             }
         }
         
@@ -61,7 +68,17 @@ namespace JDR.Models
             if (hero.X == x && hero.Y == y)
                 return $"sprite {hero.FacingDirection}";
             else if (Monsters.Any(m => m.X == x && m.Y == y))
-                return "monster";
+            {
+                var monster = Monsters.First(m => m.X == x && m.Y == y); // Finds the right type of monster
+                if (monster.Name == "Dragon")
+                {
+                    return "boss";
+                }
+                else
+                {
+                    return "monster";
+                }
+            }
             else if (Fountains.Any(f => f.X == x && f.Y == y))
                 return "fountain";
             return "";
