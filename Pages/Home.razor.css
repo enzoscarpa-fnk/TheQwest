@@ -85,6 +85,17 @@ body {
     margin-top: auto;
 }
 
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* 60% transparency black, modify if too light or too dark */
+    pointer-events: none; /* Let events play */
+    z-index: 10; /* Place overlay over the map */
+}
+
 .popup-overlay {
     position: fixed;
     top: 0;

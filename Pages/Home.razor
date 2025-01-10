@@ -71,7 +71,14 @@
             @if (heroCreated && hero != null)
             {
                 <div class="grid" style="position: relative;">
-                    <MapComponent @ref="mapComponent" Hero="hero" HeroCreated="heroCreated" OnFightStateChange="HandleFightStateChange" OnFight="HandleFight" IsFighting="(() => isFighting)" />
+                    <MapComponent 
+                        @ref="mapComponent"
+                        Hero="hero"
+                        HeroCreated="heroCreated"
+                        OnHeroStatsUpdated="UpdateHeroStats"
+                        OnFightStateChange="HandleFightStateChange"
+                        OnFight="HandleFight"
+                        IsFighting="(() => isFighting)" />
 
                     @if (isFighting)
                     {
@@ -126,19 +133,17 @@
 
 @code {
     // Fight component properties
-    private readonly LevelProgression levelProgression = new();
     private Hero? hero;
     private Monster? monster;
-    private bool isFighting = false;
-    private bool heroCreated = false;
+    private bool isFighting;
+    private bool heroCreated;
     private string CharacterName;
     private string CharacterClass;
 
     // Map component properties
     private MapComponent mapComponent = null!;
     private ElementReference gridRef;
-    private bool isGameOver = false;
-    private Random random = new();
+    private bool isGameOver;
 
     // Fight component methods
     
@@ -184,6 +189,11 @@
         {
             isGameOver = true;
         }
+    }
+    
+    private void UpdateHeroStats(Hero updatedHero)
+    {
+        StateHasChanged();
     }
 
     private void StartGame()
