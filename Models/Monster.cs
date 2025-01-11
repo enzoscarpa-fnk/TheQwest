@@ -16,14 +16,12 @@ namespace JDR.Models
         {
             ArmorValue = armorValue;
             CriticalChance = criticalChance;
-            HasteRating = hasteRating;
+            HasteValue = hasteRating;
             DodgeRating = dodgeRating;
             CalculateLevel(heroLevel);
         }
         public int Stamina { get; set; }
         public int Power { get; set; }
-        public int HasteRating { get; set; }
-        public int DodgeRating { get; set; }
 
         // Initializes stats
         private void InitializeStats()

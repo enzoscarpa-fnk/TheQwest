@@ -2,7 +2,6 @@ namespace JDR.Models
 {
     public class MonsterGoblin : Monster
     {
-        public int Id { get; set; }
         public MonsterGoblin(
             int x,
             int y,

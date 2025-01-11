@@ -101,13 +101,15 @@
                         <p><strong>Level </strong> @hero?.Level</p>
                         <p><strong>Health:</strong> @hero?.CurrentHealthValue / @hero?.MaxHealthValue HP</p>
                         <p><strong>Energy:</strong> @hero?.CurrentEnergyValue / @hero?.MaxEnergyValue Mana</p>
-                        <button class="btn btn-danger" @onclick="HeroAttack">Meteor Blast</button>
+                        <button class="btn btn-danger" @onclick="HeroBaseAttack">Base Attack</button>
+                        <button class="btn btn-danger" @onclick="HeroLowTierAttack">Frost Spikes</button>
+                        <button class="btn btn-danger" @onclick="HeroMidTierAttack">Arcane Shield</button>
+                        <button class="btn btn-danger" @onclick="HeroUltimateAttack">Meteor Blast</button>
                     </div>
                     <div class="opponent">
                         <h4><strong>@monster?.Name</strong></h4>
                         <p><strong>Level </strong> @monster?.Level</p>
                         <p><strong>Health:</strong> @monster?.CurrentHealthValue / @monster?.MaxHealthValue</p>
-                        <button class="btn btn-danger" @onclick="MonsterAttack">Base Attack</button>
                     </div>
                 </div>
             </div>
@@ -137,15 +139,75 @@
     private Monster? monster;
     private bool isFighting;
     private bool heroCreated;
-    private string CharacterName;
-    private string CharacterClass;
+    private string? CharacterName;
+    private string? CharacterClass;
 
     // Map component properties
     private MapComponent mapComponent = null!;
-    private ElementReference gridRef;
-    private bool isGameOver;
+    private bool isGameOver = false;
 
     // Fight component methods
+    private void HeroBaseAttack()
+    {
+        if (hero != null && monster != null)
+        {
+            hero.BaseAttack(monster, null);
+            if (monster.CurrentHealthValue <= 0)
+            {
+                mapComponent.EndFight(); // Ends fight when monster is killed
+            }
+            else
+            {
+                MonsterAttack();
+            }
+            StateHasChanged();
+        }
+    }
+    private void HeroLowTierAttack()
+    {
+        if (hero != null && monster != null && hero.LowTierAttack(monster, null))
+        {
+            if (monster.CurrentHealthValue > 0)
+            {
+                MonsterAttack();
+            }
+            else
+            {
+                mapComponent.EndFight(); // Ends fight when monster is killed
+            }
+            StateHasChanged();
+        }
+    }
+    private void HeroMidTierAttack()
+    {
+        if (hero != null && monster != null && hero.MidTierAttack(null, StateHasChanged))
+        {
+            if (monster.CurrentHealthValue > 0)
+            {
+                MonsterAttack();
+            }
+            else
+            {
+                mapComponent.EndFight(); // Ends fight when monster is killed
+            }
+            StateHasChanged();
+        }
+    }
+    private void HeroUltimateAttack()
+    {
+        if (hero != null && monster != null && mapComponent != null && hero.UltimateAttack(monster, null))
+        {
+            if (monster.CurrentHealthValue > 0)
+            {
+                MonsterAttack();
+            }
+            else
+            {
+                mapComponent.EndFight(); // Ends fight when monster is killed
+            }
+            StateHasChanged();
+        }
+    }
     
     private void HandleFight(Monster monster)
     {
@@ -159,23 +221,6 @@
         StateHasChanged();
     }
     
-    private void HeroAttack()
-    {
-        if (hero != null && monster != null && mapComponent != null)
-        {
-            // hero.BaseAttack(monster, null);
-            // hero.LowTierAttack(monster, null);
-            // hero.MidTierAttack(StateHasChanged);
-            hero.UltimateAttack(monster, null);
-
-            if (monster.CurrentHealthValue <= 0)
-            {
-                mapComponent.EndFight(); // Ends fight when monster is killed
-            }
-
-            StateHasChanged();
-        }
-    }
 
     // Manages the monsters' attacks
     private void MonsterAttack()
