@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IJSRuntime JSRuntime
+@inject IServiceProvider ServiceProvider
 @using JDR.Models
 
 <PageTitle>JDR</PageTitle>
@@ -65,47 +66,27 @@
 
     <!-- Central panel : Map of the game -->
     <div id="center-panel">
-        @if (heroCreated)
-        {
-            <div style="position: relative;">
-                <div
-                class="grid"
-                tabindex="0"
-                @onkeydown="HandleKeyDown"
-                @ref="gridRef"
-                autofocus>
-                    @for (int row = 0; row < GridSize; row++)
+        <!-- Central panel : Map of the game -->
+        <div id="center-panel">
+            @if (heroCreated && hero != null)
+            {
+                <div class="grid" style="position: relative;">
+                    <MapComponent 
+                        @ref="mapComponent"
+                        Hero="hero"
+                        HeroCreated="heroCreated"
+                        OnHeroStatsUpdated="UpdateHeroStats"
+                        OnFightStateChange="HandleFightStateChange"
+                        OnFight="HandleFight"
+                        IsFighting="(() => isFighting)" />
+
+                    @if (isFighting)
                     {
-                        @for (int col = 0; col < GridSize; col++)
-                        {
-                            var cellContent = "";
-                            if (row == hero.Y && col == hero.X)
-                                cellContent = $"sprite {hero.FacingDirection}";
-                            else if (monsters.Any(m => m.X == col && m.Y == row))
-                            {
-                                var monster = monsters.First(m => m.X == col && m.Y == row); // Trouver le monstre correspondant
-                                if (monster.Name == "Dragon")
-                                {
-                                    cellContent = "boss"; // Case contenant un dragon
-                                }
-                                else
-                                {
-                                    cellContent = "monster"; // Autres types de monstres
-                                }
-                            }
-                            else if (fountains.Any(m => m.X == col && m.Y == row))
-                                cellContent = "fountain";
-                            <div class="cell @cellContent"></div>
-                        }
+                        <div class="grid-overlay"></div> <!-- Grays out the map when hero is fighting -->
                     }
                 </div>
-
-                @if (isFighting)
-                {
-                    <div class="grid-overlay"></div> <!-- Grays out the map when hero is fighting -->
-                }
-            </div>
-        }
+            }
+        </div>
     </div>
 
     <!-- Right panel : Fight interface -->
@@ -119,7 +100,7 @@
                         <h4><strong>@hero?.Name</strong></h4>
                         <p><strong>Level </strong> @hero?.Level</p>
                         <p><strong>Health:</strong> @hero?.CurrentHealthValue / @hero?.MaxHealthValue HP</p>
-                        <p><strong>Energy:</strong> @hero?.CurrentEnergyValue / @hero.MaxEnergyValue Mana</p>
+                        <p><strong>Energy:</strong> @hero?.CurrentEnergyValue / @hero?.MaxEnergyValue Mana</p>
                         <button class="btn btn-danger" @onclick="HeroAttack">Meteor Blast</button>
                     </div>
                     <div class="opponent">
@@ -152,28 +133,35 @@
 
 @code {
     // Fight component properties
-    private readonly LevelProgression levelProgression = new();
     private Hero? hero;
     private Monster? monster;
-    private bool isFighting = false;
-    private bool heroCreated = false;
+    private bool isFighting;
+    private bool heroCreated;
     private string CharacterName;
     private string CharacterClass;
 
     // Map component properties
-    private const int GridSize = 10;
+    private MapComponent mapComponent = null!;
     private ElementReference gridRef;
-    private bool isGameOver = false;
-    private List<Monster> monsters = new();
-    private List<LifeFountain> fountains = new();
-    private Random random = new();
-    private DateTime lastMovementTime = DateTime.MinValue;
-    private readonly TimeSpan debounceDelay = TimeSpan.FromMilliseconds(100);
+    private bool isGameOver;
 
     // Fight component methods
+    
+    private void HandleFight(Monster monster)
+    {
+        this.monster = monster; // Met à jour le monstre
+        StateHasChanged();
+    }
+    
+    private void HandleFightStateChange(bool state)
+    {
+        isFighting = state;
+        StateHasChanged();
+    }
+    
     private void HeroAttack()
     {
-        if (hero != null && monster != null)
+        if (hero != null && monster != null && mapComponent != null)
         {
             // hero.BaseAttack(monster, null);
             // hero.LowTierAttack(monster, null);
@@ -182,7 +170,7 @@
 
             if (monster.CurrentHealthValue <= 0)
             {
-                EndFight(); // Ends fight when monster is killed
+                mapComponent.EndFight(); // Ends fight when monster is killed
             }
 
             StateHasChanged();
@@ -202,113 +190,21 @@
             isGameOver = true;
         }
     }
+              
+    private void UpdateHeroStats(Hero updatedHero)
+    {
+        StateHasChanged();
+    }
 
+    private void StartGame()
+    {
+        hero = Hero.CreateHero(CharacterClass, CharacterName);
+        heroCreated = true;
+    }
+    
     private void GameOver()
     {
         isGameOver = true;
-    }
-
-    // Manages the end of the fight
-    private async void EndFight()
-    {
-        // Remove actual monster from list
-        if (monster != null)
-        {
-            var monsterToRemove = monsters.FirstOrDefault(m => m.X == hero.X && m.Y == hero.Y);
-            if (monsterToRemove != null)
-            {
-                monsters.Remove(monsterToRemove);
-            }
-        }
-
-        isFighting = false; // Turns off combat UI
-        monster = null;         // Reinitialize monster
-        await gridRef.FocusAsync(); // Makes the focus on the map
-        StateHasChanged();  // Updates UI
-    }
-
-    // Map component methods
-
-    // Generates entities at random location on the map
-    private void GenerateEntities()
-    {
-        monsters.Clear(); // Clears monsters list
-        fountains.Clear(); // Clears fountains list
-
-        // Generates 5 monsters at random location
-        for (int i = 0; i < 5; i++)
-        {
-            (int x, int y) = GetRandomPosition();
-            monsters.Add(new MonsterGoblin(x, y, hero.Level));
-        }
-
-        // Generates 4 fountains at random location
-        for (int i = 0; i < 4; i++)
-        {
-            (int x, int y) = GetRandomPosition();
-            fountains.Add(new LifeFountain(x, y));
-        }
-
-        // Generates 1 boss
-        for (int i = 0; i < 1; i++)
-        {
-            (int x, int y) = GetRandomPosition();
-            monsters.Add(new Boss(x, y, hero.Level+2));
-        }
-    }
-
-    private (int X, int Y) GetRandomPosition()
-    {
-        (int X, int Y) position;
-        do
-        {
-            position = (random.Next(0, GridSize), random.Next(0, GridSize));
-        } while (
-            monsters.Any(m => m.X == position.X && m.Y == position.Y) ||
-            fountains.Any(f => f.X == position.X && f.Y == position.Y) ||
-            (position.X == hero.X && position.Y == hero.Y)
-        );
-        return position;
-    }
-
-    // Manages the keys' events
-    private void HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (isFighting) return; // Player stays still on the map when fighting
-
-        var now = DateTime.Now;
-        if (now - lastMovementTime < debounceDelay) return; // Ignores if too quick
-
-        if (e.Key.StartsWith("Arrow"))
-        {
-            string direction = e.Key.Replace("Arrow", ""); // Extract "Up", "Down", "Left", or "Right"
-            hero.Move(direction, GridSize);
-            CheckInteractions();    
-            lastMovementTime = now; // Updates the last movement time
-        }
-    }
-
-    // Checks interactions of hero with entities on map
-    private void CheckInteractions()
-    {
-        var playerPosition = (hero.X, hero.Y);
-
-        // Interaction with a monster
-        monster = monsters.FirstOrDefault(m => (m.X, m.Y) == playerPosition);
-        if (monster != null)
-        {
-            isFighting = true; // Turns on combat UI
-            StateHasChanged();
-        }
-
-        // Interaction with a fountain
-        var fountain = fountains.FirstOrDefault(f => (f.X, f.Y) == playerPosition);
-        if (fountain != null)
-        {
-            LifeFountain.HealPlayer(hero);
-            fountains.Remove(fountain);
-            StateHasChanged();
-        }
     }
 
     // Restarts a new game
@@ -317,27 +213,6 @@
         heroCreated = false;
         isFighting = false;
         isGameOver = false; // Turns off the game over popup
-    }
-
-    private void StartGame()
-    {
-        hero = Hero.CreateHero(CharacterClass, CharacterName);
-        heroCreated = true;
-        GenerateEntities();
-        StateHasChanged();
-    }
-
-    // Keep focus on the map ++ prevents page scrolling with arrow keys
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("preventArrowScroll");
-            if (heroCreated && gridRef.Context != null)
-            {
-                await gridRef.FocusAsync();
-            }
-        }
     }
 
     // OnInitialized method
