@@ -54,9 +54,8 @@ namespace JDR.Models
         // The base attack
         public override void BaseAttack(Character target, Action restartGameAction)
         {
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 2) { return; }
+            if (target.CurrentHealthValue == 0) { return; }
         
-            CurrentEnergyValue -= 2;
             int baseDamage = AttackValue - target.ArmorValue;
             int damage = baseDamage <= 0 ? 0 : baseDamage;
 
