@@ -18,6 +18,7 @@ namespace JDR.Models
         public int ArmorValue { get; set; }
         public double CriticalHitFactor { get; set; }
         public int HasteValue { get; set; }
+        public int DodgeRating { get; set; }
 
         public Character(
             int x,
@@ -25,6 +26,7 @@ namespace JDR.Models
             string characterName,
             double criticalHitFactor = 1.72,
             int? hasteValue = null,
+            int? dodgeRating = null
             )
         {
             X = x;
@@ -32,6 +34,7 @@ namespace JDR.Models
             Name = characterName;
             CriticalHitFactor = criticalHitFactor;
             HasteValue = hasteValue ?? rand.Next(1, 21);
+            DodgeRating = dodgeRating ?? rand.Next(1, 21);
         }
         
         // The base attack

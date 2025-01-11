@@ -110,7 +110,6 @@
                         <h4><strong>@monster?.Name</strong></h4>
                         <p><strong>Level </strong> @monster?.Level</p>
                         <p><strong>Health:</strong> @monster?.CurrentHealthValue / @monster?.MaxHealthValue</p>
-                        <button class="btn btn-danger" @onclick="MonsterAttack">Base Attack</button>
                     </div>
                 </div>
             </div>
@@ -140,13 +139,11 @@
     private Monster? monster;
     private bool isFighting;
     private bool heroCreated;
-    private string CharacterName;
-    private string CharacterClass;
+    private string? CharacterName;
+    private string? CharacterClass;
 
     // Map component properties
     private MapComponent mapComponent = null!;
-    private ElementReference gridRef;
-    private bool isGameOver;
     private bool isGameOver = false;
 
     // Fight component methods
@@ -168,48 +165,45 @@
     }
     private void HeroLowTierAttack()
     {
-        if (hero != null && monster != null)
+        if (hero != null && monster != null && hero.LowTierAttack(monster, null))
         {
-            hero.LowTierAttack(monster, null);
-            if (monster.CurrentHealthValue <= 0)
+            if (monster.CurrentHealthValue > 0)
             {
-                mapComponent.EndFight(); // Ends fight when monster is killed
+                MonsterAttack();
             }
             else
             {
-                MonsterAttack();
+                mapComponent.EndFight(); // Ends fight when monster is killed
             }
             StateHasChanged();
         }
     }
     private void HeroMidTierAttack()
     {
-        if (hero != null && monster != null)
+        if (hero != null && monster != null && hero.MidTierAttack(null, StateHasChanged))
         {
-            hero.MidTierAttack(null, StateHasChanged);
-            if (monster.CurrentHealthValue <= 0)
+            if (monster.CurrentHealthValue > 0)
             {
-                mapComponent.EndFight(); // Ends fight when monster is killed
+                MonsterAttack();
             }
             else
             {
-                MonsterAttack();
+                mapComponent.EndFight(); // Ends fight when monster is killed
             }
             StateHasChanged();
         }
     }
     private void HeroUltimateAttack()
     {
-        if (hero != null && monster != null && mapComponent != null)
+        if (hero != null && monster != null && mapComponent != null && hero.UltimateAttack(monster, null))
         {
-            hero.UltimateAttack(monster, null);
-            if (monster.CurrentHealthValue <= 0)
+            if (monster.CurrentHealthValue > 0)
             {
-                mapComponent.EndFight(); // Ends fight when monster is killed
+                MonsterAttack();
             }
             else
             {
-                MonsterAttack();
+                mapComponent.EndFight(); // Ends fight when monster is killed
             }
             StateHasChanged();
         }

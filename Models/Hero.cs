@@ -1,6 +1,6 @@
 namespace JDR.Models
 {
-    public class Hero : Character
+    public abstract class Hero : Character
     {
         public Direction FacingDirection { get; private set; } = Direction.Right;
         private readonly LevelProgression levelProgression;
@@ -14,7 +14,6 @@ namespace JDR.Models
         public int Agility { get; set; }
         public int Spirit { get; set; }
         public int BonusDamage { get; set; }
-        public int DodgeRating { get; set; }
 
         public Hero(
             string characterName,
@@ -46,11 +45,11 @@ namespace JDR.Models
             }
         }
 
-        public virtual void LowTierAttack(Character target, Action action) { }
+        public abstract bool LowTierAttack(Character target, Action action);
 
-        public virtual void MidTierAttack(Character target, Action action) { }
+        public abstract bool MidTierAttack(Character target, Action action);
 
-        public virtual void UltimateAttack(Character target, Action action) { }
+        public abstract bool UltimateAttack(Character target, Action action);
 
         // Calculates the experience gained
         public void CalculateExperience(Character target)
@@ -93,7 +92,7 @@ namespace JDR.Models
             ArmorValue += item.ArmorBonus;
             BonusDamage += item.DamageBonus;
             CriticalChance += item.CriticalChanceBonus;
-            HasteRating += item.HasteBonus;
+            HasteValue += item.HasteBonus;
             DodgeRating += item.DodgeBonus;
 
             Console.WriteLine($"{Name} equipped {item.Name}.");

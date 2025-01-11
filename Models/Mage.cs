@@ -14,8 +14,8 @@ namespace JDR.Models
             int armorValue = 2,
             int bonusDamage = 0,
             int criticalChance = 2,
-            int dodgeRating = 5
             int hasteRating = 15,
+            int dodgeRating = 15
             ) : base(characterName, progression)
         {
             Level = level;
@@ -24,7 +24,7 @@ namespace JDR.Models
             ArmorValue = armorValue;
             BonusDamage = bonusDamage;
             CriticalChance = criticalChance;
-            HasteRating = hasteRating;
+            HasteValue = hasteRating;
             DodgeRating = dodgeRating;
             InitializeStats();
         }
@@ -70,9 +70,13 @@ namespace JDR.Models
         }
 
         // Low tier spell
-        public override void LowTierAttack(Character target, Action restartGameAction)
+        public override bool LowTierAttack(Character target, Action restartGameAction)
         {
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 6) { return; }
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 6)
+            {
+                Console.WriteLine("Not enough Mana");
+                return false;
+            }
        
             CurrentEnergyValue -= 6;
             int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 2.4);
@@ -86,12 +90,17 @@ namespace JDR.Models
             Console.WriteLine(message);
         
             target.TakeDamage(calculatedDamage, this, restartGameAction);
+            return true;
         }
 
         // Mid tier spell
-        public override async void MidTierAttack(Character target, Action refreshUI)
+        public override bool MidTierAttack(Character target, Action refreshUI)
         {
-            if (CurrentHealthValue == 0 || CurrentEnergyValue < 4) {  return; }
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 4)
+            {
+                Console.WriteLine("Not enough Mana");
+                return false;
+            }
 
             CurrentEnergyValue -= 4;
             int originalArmorValue = target.ArmorValue;
@@ -101,18 +110,23 @@ namespace JDR.Models
             refreshUI?.Invoke();  // Forces the UI to refresh after casting the spell
 
             // Delay before stat returns to original value
-            await Task.Delay(4000);
+            // await Task.Delay(4000);
 
             target.ArmorValue = originalArmorValue;
             Console.WriteLine($"{target.Name}'s Arcane Shield has worn off. Armor value returns to normal.");
             refreshUI?.Invoke();  // Forces the UI to refresh after the spell has no more effect
+            return true;
         }
 
         // Ultimate spell
-        public override void UltimateAttack(Character target, Action restartGameAction)
+        public override bool UltimateAttack(Character target, Action restartGameAction)
         {
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 18) { return; }
         
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 18)
+            {
+                Console.WriteLine("Not enough Mana");
+                return false;
+            }
             CurrentEnergyValue -= 18;
             int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 6.9);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
@@ -125,6 +139,7 @@ namespace JDR.Models
             Console.WriteLine(message);
         
             target.TakeDamage(calculatedDamage, this, restartGameAction);
+            return true;
         }
     }
 }
