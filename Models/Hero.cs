@@ -14,7 +14,6 @@ namespace JDR.Models
         public int Agility { get; set; }
         public int Spirit { get; set; }
         public int BonusDamage { get; set; }
-        public int HasteRating { get; set; }
         public int DodgeRating { get; set; }
 
         public Hero(

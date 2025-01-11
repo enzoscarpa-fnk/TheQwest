@@ -14,8 +14,8 @@ namespace JDR.Models
             int armorValue = 2,
             int bonusDamage = 0,
             int criticalChance = 2,
-            int hasteRating = 5,
             int dodgeRating = 5
+            int hasteRating = 15,
             ) : base(characterName, progression)
         {
             Level = level;
