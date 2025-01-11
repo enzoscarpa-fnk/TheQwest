@@ -10,7 +10,7 @@ namespace JDR.Models
             LevelProgression progression,
             int level = 1,
             int experienceValue = 0,
-            int energyValue = 40,
+            int energyValue = 13,
             int armorValue = 2,
             int bonusDamage = 0,
             int criticalChance = 2,
@@ -32,23 +32,34 @@ namespace JDR.Models
         // Initializes stats
         private void InitializeStats()
         {
-            Stamina = StatsCalculator.CalculateStat(2, 1.2, Level);
+            Stamina = StatsCalculator.CalculateStat(8, 1.27, Level);
             Strength = StatsCalculator.CalculateStat(1, 1.05, Level);
-            Intellect = StatsCalculator.CalculateStat(4, 1.25, Level);
+            Intellect = StatsCalculator.CalculateStat(4, 1.27, Level);
             Agility = StatsCalculator.CalculateStat(1, 1.05, Level);
-            Spirit = StatsCalculator.CalculateStat(3, 1.15, Level);
-            CurrentHealthValue = Stamina * 10;
-            MaxHealthValue = CurrentHealthValue;
-            CurrentEnergyValue = (int)Math.Round(CurrentEnergyValue * (Spirit * 0.65));
-            MaxEnergyValue = CurrentEnergyValue;
-            AttackValue = (int)Math.Round(Intellect * 1.8);
+            Spirit = StatsCalculator.CalculateStat(7, 1.27, Level);
+            MaxHealthValue = Stamina * 4;
+            MaxEnergyValue = (int)Math.Floor(13 * Spirit * 0.6);
+            AttackValue = (int)Math.Floor(Intellect * 1.8);
+            if (Level == 1) // First initialization
+            {
+                CurrentHealthValue = MaxHealthValue;
+                CurrentEnergyValue = MaxEnergyValue;
+            }
         }
     
         // Overrides the base LevelUp method to update the stats
         protected override void LevelUp()
         {
             base.LevelUp();
+            int previousMaxEnergyValue = MaxEnergyValue;
             InitializeStats(); // Updates stats after level up
+            
+            // Adjust CurrentEnergyValue proportionally to the increase in MaxEnergyValue
+            CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
+
+            // Ensure CurrentEnergyValue does not exceed MaxEnergyValue
+            if (CurrentEnergyValue > MaxEnergyValue)
+                CurrentEnergyValue = MaxEnergyValue;
         }
     
         // The base attack

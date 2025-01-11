@@ -11,7 +11,7 @@ namespace JDR.Models
             int bonus = (level / bonusInterval) * bonusAmount;
 
             // Diminishing returns to avoid excessive value growth
-            double diminishingFactor = 1 - (level / 100.0);
+            double diminishingFactor = Math.Max(1 - (level / 100.0), 0.5);
 
             // Applies diminishing factor
             statValue *= diminishingFactor;
