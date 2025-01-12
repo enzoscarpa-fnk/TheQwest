@@ -56,7 +56,17 @@ namespace JDR.Models
 
             Console.WriteLine($"You healed of {healAmount} HP.");
         }
-    
+
+        // Decides if the attack is dodged
+        public bool Dodge()
+        {
+            if (rand.Next(1, 101) <= DodgeRating) // Return true if the roll result is in the range of the DodgeRating value
+            {
+                return true;
+            }
+            return false;
+        }
+        
         public void TakeDamage(int damage, Character attacker, Action gameOverAction)
         {
             CurrentHealthValue -= damage;
@@ -66,7 +76,14 @@ namespace JDR.Models
                 Die(attacker, gameOverAction);
             }
         }
-    
+
+        // Decides if the attack is a critical hit
+        public int CriticalHit(int baseDamage, out bool isCritical)
+        {
+            isCritical = rand.Next(1, 101) <= CriticalChance; // Return true if the roll result is in the range of the CriticalChance value
+            return isCritical ? (int)(baseDamage * CriticalHitFactor) : baseDamage; // if result is true then crit damage, else base damage
+        }
+        
         public void Die(Character attacker, Action gameOverAction)
         {
             CurrentHealthValue = 0;
@@ -81,13 +98,6 @@ namespace JDR.Models
             {
                 gameOverAction.Invoke();
             }
-        }
-
-        // Decides if the attack is a critical hit
-        public int CriticalHit(int baseDamage, out bool isCritical)
-        {
-            isCritical = rand.Next(1, 101) <= CriticalChance; // Return true if the roll result is in the range of the CriticalChance value
-            return isCritical ? (int)(baseDamage * CriticalHitFactor) : baseDamage; // if result is true then crit damage, else base damage
         }
     }
 }
