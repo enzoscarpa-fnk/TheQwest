@@ -16,7 +16,7 @@
     border: 1px solid #ddd;
 }
 
-@keyframes spriteAnimation {
+@keyframes heroSpriteAnimation {
     from {
         background-position: 0;
     }
@@ -27,12 +27,12 @@
     /* 64px x 6 frames */
 }
 
-.sprite {
+.heroSprite {
     width: 64px; /* width of frame */
     height: 64px; /* height of frame */
     background-image: url('./images/Run-Sheet.png');
     background-repeat: no-repeat;
-    animation: spriteAnimation 0.8s steps(6) infinite;
+    animation: heroSpriteAnimation 0.8s steps(6) infinite;
     transform-origin: center center;
 }
 

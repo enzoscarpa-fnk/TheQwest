@@ -54,7 +54,7 @@ namespace JDR.Models
             CurrentHealthValue = Math.Min(CurrentHealthValue + heal, MaxHealthValue);
             int healAmount = CurrentHealthValue - healthBeforeHeal;
 
-            Console.WriteLine($"You healed of {healAmount} HP.");
+            Console.WriteLine($"{Name} healed of {healAmount} HP.");
         }
 
         // Decides if the attack is dodged
@@ -92,6 +92,7 @@ namespace JDR.Models
             if (attacker is Hero heroAttacker)
             {
                 heroAttacker.CalculateExperience(this);
+                heroAttacker.RegenEnergy();
             }
             
             if (attacker is Monster)

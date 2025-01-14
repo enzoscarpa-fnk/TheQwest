@@ -79,6 +79,11 @@ namespace JDR.Models
 
                 target.TakeDamage(calculatedDamage, this, restartGameAction);
             }
+            
+            if (target is Hero hero)
+            {
+                hero.RegenEnergyLow();
+            }
         }
     }
 }

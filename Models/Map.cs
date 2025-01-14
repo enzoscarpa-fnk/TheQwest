@@ -66,7 +66,7 @@ namespace JDR.Models
         public string RenderCell(int x, int y)
         {
             if (hero.X == x && hero.Y == y)
-                return $"sprite {hero.FacingDirection}";
+                return $"heroSprite {hero.FacingDirection}";
             else if (Monsters.Any(m => m.X == x && m.Y == y))
             {
                 var monster = Monsters.First(m => m.X == x && m.Y == y); // Finds the right type of monster

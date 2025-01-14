@@ -135,25 +135,29 @@
     }
     
     // Manages the end of the fight
-    internal async void EndFight()
+    internal async void EndFight(bool isFleeing = false)
     {
-        // Remove actual monster from list
-        if (monster != null)
+        if (monster != null && !isFleeing)
         {
+            // Remove actual monster from list
             var monsterToRemove = monsters.FirstOrDefault(m => m.X == Hero.X && m.Y == Hero.Y);
             if (monsterToRemove != null)
             {
                 monsters.Remove(monsterToRemove);
             }
         }
+        else
+        {
+            monster?.Heal(25); // The monster heals itself (25) if Hero has flown
+        }
         
         isFighting = false; // Turns off combat UI
-        monster = null;         // Reinitialize monster
+        monster = null; // Reinitialize monster
         if (OnFightStateChange.HasDelegate)
         {
             await OnFightStateChange.InvokeAsync(false); // Lets Home.razor know the fight is finished
         }
         await gridRef.FocusAsync(); // Makes the focus on the map
-        StateHasChanged();  // Updates UI
+        StateHasChanged(); // Updates UI
     }
 }
