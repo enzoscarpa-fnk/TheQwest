@@ -16,7 +16,7 @@
     border: 1px solid #ddd;
 }
 
-@keyframes herospriteAnimation {
+@keyframes heroSpriteAnimation {
     from {
         background-position: 0px;
     }
@@ -27,16 +27,16 @@
     /* 64px x 6 frames */
 }
 
-.herosprite {
+.heroSprite {
     width: 64px; /* width of frame */
     height: 64px; /* height of frame */
     background-image: url('./images/Run-Sheet.png');
     background-repeat: no-repeat;
-    animation: herospriteAnimation 0.8s steps(6) infinite;
+    animation: heroSpriteAnimation 0.8s steps(6) infinite;
     transform-origin: center center;
 }
 
-@keyframes treasureAnimation {
+@keyframes treasureSpriteAnimation {
     from {
         background-position: 0;
     }
@@ -45,12 +45,12 @@
     }
 }
 
-.treasure {
+.treasureSprite {
     width: 64px; /* Largeur d'une frame */
     height: 64px; /* Hauteur d'une frame */
     background-image: url('./images/Chest.png'); /* Chemin vers ton sprite */
     background-repeat: no-repeat;
-    animation: treasureAnimation 0.8s steps(3) infinite;
+    animation: treasureSpriteAnimation 0.8s steps(3) infinite;
     transform-origin: center center;
 }
 
