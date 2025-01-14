@@ -105,6 +105,7 @@
                         <button class="btn btn-danger" @onclick="HeroLowTierAttack">Frost Spikes</button>
                         <button class="btn btn-danger" @onclick="HeroMidTierAttack">Arcane Shield</button>
                         <button class="btn btn-danger" @onclick="HeroUltimateAttack">Meteor Blast</button>
+                        <button class="btn btn-danger" @onclick="TryToFlee">Flee</button>
                     </div>
                     <div class="opponent">
                         <h4><strong>@monster?.Name</strong></h4>
@@ -141,6 +142,7 @@
     private bool heroCreated;
     private string? CharacterName;
     private string? CharacterClass;
+    private Random random = new Random();
 
     // Map component properties
     private MapComponent mapComponent = null!;
@@ -206,6 +208,28 @@
                 mapComponent.EndFight(); // Ends fight when monster is killed
             }
             StateHasChanged();
+        }
+    }
+
+    private void TryToFlee()
+    {
+        if (hero != null && monster != null && mapComponent != null)
+        {
+            Console.WriteLine($"{hero?.Name} tries to flee...");
+            int fleeChance = 80;
+            int roll = random.Next(1, 101);
+        
+            if (roll <= fleeChance)
+            {
+                MonsterAttack();
+                Console.WriteLine($"{hero?.Name} took some damage by {monster?.Name} while fleeing !");
+                mapComponent.EndFight(true);
+            }
+            else
+            {
+                Console.WriteLine($"{hero?.Name} couldn't flee !");
+                MonsterAttack();
+            }
         }
     }
     

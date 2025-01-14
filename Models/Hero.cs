@@ -45,6 +45,16 @@ namespace JDR.Models
             }
         }
 
+        public void RegenEnergy()
+        {
+            CurrentEnergyValue = Math.Min(CurrentEnergyValue + Spirit, MaxEnergyValue);
+        }
+        
+        public void RegenEnergyLow()
+        {
+            CurrentEnergyValue = (int)Math.Min(CurrentEnergyValue + Math.Floor(Spirit * 0.5), MaxEnergyValue);
+        }
+
         public abstract bool LowTierAttack(Character target, Action action);
 
         public abstract bool MidTierAttack(Character target, Action action);

@@ -60,18 +60,30 @@ namespace JDR.Models
         {
             if (target.CurrentHealthValue == 0)
                 return;
+            
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+            }
+            else
+            {
+                int baseDamage = AttackValue - target.ArmorValue;
+                int damage = baseDamage <= 0 ? 0 : baseDamage;
 
-            int baseDamage = AttackValue - target.ArmorValue;
-            int damage = baseDamage <= 0 ? 0 : baseDamage;
+                int calculatedDamage = CriticalHit(damage, out bool isCritical);
 
-            int calculatedDamage = CriticalHit(damage, out bool isCritical);
+                string message = isCritical ? "Critical hit! " : "";
+                message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
 
-            string message = isCritical ? "Critical hit! " : "";
-            message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
+                Console.WriteLine(message);
 
-            Console.WriteLine(message);
-
-            target.TakeDamage(calculatedDamage, this, restartGameAction);
+                target.TakeDamage(calculatedDamage, this, restartGameAction);
+            }
+            
+            if (target is Hero hero)
+            {
+                hero.RegenEnergyLow();
+            }
         }
     }
 }
