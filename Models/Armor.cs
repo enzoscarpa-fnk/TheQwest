@@ -1,7 +1,7 @@
 namespace JDR.Models
 {
 
-    public enum MaterialArmor {tissu, cuir, bois, métal, or}
+    public enum MaterialArmor {cloth, leather, wooden, metal, golden}
 
     public class Armor
     {
@@ -22,7 +22,7 @@ namespace JDR.Models
 
         }
 
-        // Selection aléatoire du type de matériel
+        // Random material type selection
         public MaterialArmor MaterialChance(int level)
         {
             int roll = random.Next(1, 100);
@@ -30,56 +30,56 @@ namespace JDR.Models
             switch(level)
             {
                 case 1: // Niveau 1
-                    if (roll <= 70) return MaterialArmor.tissu;    // 70% tissu
-                    if (roll <= 87) return MaterialArmor.cuir;     // 17% cuir
-                    if (roll <= 95) return MaterialArmor.bois;     // 8% bois
-                    if (roll <= 99) return MaterialArmor.métal;    // 4% métal
-                    return MaterialArmor.or;                      // 1% or
+                    if (roll <= 70) return MaterialArmor.tissu;    // 70% cloth
+                    if (roll <= 87) return MaterialArmor.cuir;     // 17% leather
+                    if (roll <= 95) return MaterialArmor.bois;     // 8% wooden
+                    if (roll <= 99) return MaterialArmor.métal;    // 4% metal
+                    return MaterialArmor.or;                      // 1% golden
 
                 case 2: // Niveau 2
                     if (roll <= 50) return MaterialArmor.tissu;    // 50% tissu
-                    if (roll <= 75) return MaterialArmor.cuir;     // 25% cuir
-                    if (roll <= 90) return MaterialArmor.bois;     // 15% bois
-                    if (roll <= 98) return MaterialArmor.métal;    // 8% métal
-                    return MaterialArmor.or;                      // 2% or
+                    if (roll <= 75) return MaterialArmor.cuir;     // 25% leather
+                    if (roll <= 90) return MaterialArmor.bois;     // 15% wooden
+                    if (roll <= 98) return MaterialArmor.métal;    // 8% metal
+                    return MaterialArmor.or;                      // 2% golden
 
                 case 3: // Niveau 3
-                    if (roll <= 40) return MaterialArmor.tissu;    // 40% tissu
-                    if (roll <= 65) return MaterialArmor.cuir;     // 25% cuir
-                    if (roll <= 85) return MaterialArmor.bois;     // 20% bois
-                    if (roll <= 95) return MaterialArmor.métal;    // 10% métal
-                    return MaterialArmor.or;                      // 5% or
+                    if (roll <= 40) return MaterialArmor.tissu;    // 40% cloth
+                    if (roll <= 65) return MaterialArmor.cuir;     // 25% leather
+                    if (roll <= 85) return MaterialArmor.bois;     // 20% wooden
+                    if (roll <= 95) return MaterialArmor.métal;    // 10% metal
+                    return MaterialArmor.or;                      // 5% golden
 
                 case 4: // Niveau 4
-                    if (roll <= 30) return MaterialArmor.tissu;    // 30% tissu
-                    if (roll <= 55) return MaterialArmor.cuir;     // 25% cuir
-                    if (roll <= 75) return MaterialArmor.bois;     // 20% bois
-                    if (roll <= 90) return MaterialArmor.métal;    // 15% métal
-                    return MaterialArmor.or;                      // 10% or
+                    if (roll <= 30) return MaterialArmor.tissu;    // 30% cloth
+                    if (roll <= 55) return MaterialArmor.cuir;     // 25% leather
+                    if (roll <= 75) return MaterialArmor.bois;     // 20% wooden
+                    if (roll <= 90) return MaterialArmor.métal;    // 15% metal
+                    return MaterialArmor.or;                      // 10% golden
 
                 case 5: // Niveau 5
-                    if (roll <= 20) return MaterialArmor.tissu;    // 20% tissu
-                    if (roll <= 45) return MaterialArmor.cuir;     // 25% cuir
-                    if (roll <= 65) return MaterialArmor.bois;     // 20% bois
-                    if (roll <= 85) return MaterialArmor.métal;    // 20% métal
-                    return MaterialArmor.or;                      // 15% or
+                    if (roll <= 20) return MaterialArmor.tissu;    // 20% cloth
+                    if (roll <= 45) return MaterialArmor.cuir;     // 25% leather
+                    if (roll <= 65) return MaterialArmor.bois;     // 20% wooden
+                    if (roll <= 85) return MaterialArmor.métal;    // 20% metal
+                    return MaterialArmor.or;                      // 15% golden
 
                 case 6: // Niveau 6
-                    if (roll <= 10) return MaterialArmor.tissu;    // 10% tissu
-                    if (roll <= 30) return MaterialArmor.cuir;     // 20% cuir
-                    if (roll <= 55) return MaterialArmor.bois;     // 25% bois
-                    if (roll <= 80) return MaterialArmor.métal;    // 25% métal
-                    return MaterialArmor.or;                      // 20% or
+                    if (roll <= 10) return MaterialArmor.tissu;    // 10% cloth
+                    if (roll <= 30) return MaterialArmor.cuir;     // 20% leather
+                    if (roll <= 55) return MaterialArmor.bois;     // 25% wooden
+                    if (roll <= 80) return MaterialArmor.métal;    // 25% metal
+                    return MaterialArmor.or;                      // 20% golden
 
                 case >= 7: // Niveau 7 et plus
-                    if (roll <= 5) return MaterialArmor.tissu;     // 5% tissu
-                    if (roll <= 20) return MaterialArmor.cuir;     // 15% cuir
-                    if (roll <= 45) return MaterialArmor.bois;     // 25% bois
-                    if (roll <= 75) return MaterialArmor.métal;    // 30% métal
-                    return MaterialArmor.or;                      // 25% or
+                    if (roll <= 5) return MaterialArmor.tissu;     // 5% cloth
+                    if (roll <= 20) return MaterialArmor.cuir;     // 15% leather
+                    if (roll <= 45) return MaterialArmor.bois;     // 25% wooden
+                    if (roll <= 75) return MaterialArmor.métal;    // 30% metal
+                    return MaterialArmor.or;                      // 25% golden
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(level), "Niveau invalide !");
+                    throw new ArgumentOutOfRangeException(nameof(level), "Error: Invalid level !");
             }
         }
         private void SetAttributes(MaterialArmor MaterialType)
@@ -119,8 +119,8 @@ namespace JDR.Models
         }
         public override string ToString()
         {
-            return $"{Name}, fabriquée en {MaterialType} ! \n" +
-            $"Défense : {BaseDefense} | Poids : {Weight}";
+            return $"{Name}, made out of {MaterialType} ! \n" +
+            $"Defense : {BaseDefense} | Weight : {Weight}";
         }
     }
 }
