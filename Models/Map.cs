@@ -6,6 +6,7 @@ namespace JDR.Models
         public int ColCount { get; set; }
         public List<Monster> Monsters { get; private set; } = new();
         public List<LifeFountain> Fountains { get; private set; } = new();
+        public List<Treasure> Treasures {get; private set; } = new();
         
         private Random random = new();
         private Hero hero;
@@ -27,6 +28,7 @@ namespace JDR.Models
         {
             Monsters.Clear(); // Clears monsters list
             Fountains.Clear(); // Clears fountains list
+            Treasures.Clear(); // Clears treasures list
 
             // Generates 5 monsters at random location
             for (int i = 0; i < 5; i++)
@@ -41,7 +43,12 @@ namespace JDR.Models
                 (int x, int y) = GetRandomPosition();
                 Fountains.Add(new LifeFountain(x, y));
             }
-            
+            // Generates 2 chest at random location
+            for (int i = 0; i < 2; i++)
+            {
+                (int x, int y) = GetRandomPosition();
+                Treasures.Add(new Treasure(x, y));
+            }
             // Generates 1 boss at random location
             for (int i = 0; i < 1; i++)
             {
@@ -58,7 +65,8 @@ namespace JDR.Models
                 position = (random.Next(0, ColCount), random.Next(0, RowCount));
             } while (
                 Monsters.Any(m => m.X == position.X && m.Y == position.Y) ||
-                Fountains.Any(f => f.X == position.X && f.Y == position.Y)
+                Fountains.Any(f => f.X == position.X && f.Y == position.Y) ||
+                Treasures.Any(t => t.X == position.X && t.Y == position.Y)
             );
             return position;
         }
@@ -66,7 +74,7 @@ namespace JDR.Models
         public string RenderCell(int x, int y)
         {
             if (hero.X == x && hero.Y == y)
-                return $"sprite {hero.FacingDirection}";
+                return $"herosprite {hero.FacingDirection}";
             else if (Monsters.Any(m => m.X == x && m.Y == y))
             {
                 var monster = Monsters.First(m => m.X == x && m.Y == y); // Finds the right type of monster
@@ -81,6 +89,8 @@ namespace JDR.Models
             }
             else if (Fountains.Any(f => f.X == x && f.Y == y))
                 return "fountain";
+            else if (Treasures.Any(t => t.X == x && t.Y == y))
+                return "treasure";
             return "";
         }
         
