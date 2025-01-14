@@ -43,12 +43,14 @@ namespace JDR.Models
                 (int x, int y) = GetRandomPosition();
                 Fountains.Add(new LifeFountain(x, y));
             }
-            // Generates 2 chest at random location
+            
+            // Generates 2 chests at random location
             for (int i = 0; i < 2; i++)
             {
                 (int x, int y) = GetRandomPosition();
                 Treasures.Add(new Treasure(x, y));
             }
+            
             // Generates 1 boss at random location
             for (int i = 0; i < 1; i++)
             {
@@ -74,7 +76,7 @@ namespace JDR.Models
         public string RenderCell(int x, int y)
         {
             if (hero.X == x && hero.Y == y)
-                return $"herosprite {hero.FacingDirection}";
+                return $"heroSprite {hero.FacingDirection}";
             else if (Monsters.Any(m => m.X == x && m.Y == y))
             {
                 var monster = Monsters.First(m => m.X == x && m.Y == y); // Finds the right type of monster
@@ -90,7 +92,7 @@ namespace JDR.Models
             else if (Fountains.Any(f => f.X == x && f.Y == y))
                 return "fountain";
             else if (Treasures.Any(t => t.X == x && t.Y == y))
-                return "treasure";
+                return "treasureSprite";
             return "";
         }
         
