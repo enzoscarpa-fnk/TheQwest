@@ -36,6 +36,24 @@
     transform-origin: center center;
 }
 
+@keyframes treasureSpriteAnimation {
+    from {
+        background-position: 0;
+    }
+    to {
+        background-position: -189px;
+    }
+}
+
+.treasureSprite {
+    width: 64px;
+    height: 64px;
+    background-image: url('./images/Chest.png');
+    background-repeat: no-repeat;
+    animation: treasureSpriteAnimation 0.8s steps(3) infinite;
+    transform-origin: center center;
+}
+
 .Right {
     transform: scaleX(1);
 }

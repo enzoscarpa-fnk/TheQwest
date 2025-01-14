@@ -118,6 +118,15 @@
             OnHeroStatsUpdated.InvokeAsync(Hero);
             StateHasChanged();
         }
+
+        // Interaction with a chest
+        var chest = map.Treasures.FirstOrDefault(t => (t.X, t.Y) == playerPosition);
+        if (chest != null)
+        {
+            Treasure.FoundChest(Hero);
+            map.Treasures.Remove(chest);
+            StateHasChanged();
+        }
     }
     
     // Manages the start of the fight
