@@ -79,7 +79,7 @@ namespace JDR.Models
                     return MaterialArmor.or;                      // 25% golden
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(level), "Error: Invalid level !");
+                    throw new ArgumentOutOfRangeException(nameof(level), "Error: Invalid level.");
             }
         }
         private void SetAttributes(MaterialArmor MaterialType)
