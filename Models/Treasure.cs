@@ -18,12 +18,12 @@ namespace JDR.Models
 
             if (roll == 1) // 50% chance to have weapon
             {
-                Weapon new_weapon = new Weapon("arme", hero);
+                Weapon new_weapon = new Weapon("weapon", hero);
                 Console.WriteLine($"You have just found {new_weapon} !");
             }
             else if (roll == 2) // 50% chance to have armor
             {
-                Armor new_armor = new Armor("armure", hero);
+                Armor new_armor = new Armor("armor", hero);
                 Console.WriteLine($"You have just found {new_armor} !");
             }
             else
