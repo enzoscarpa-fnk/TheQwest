@@ -51,13 +51,18 @@ namespace JDR.Models
         protected override void LevelUp()
         {
             base.LevelUp();
+            int previousMaxHealthValue = MaxHealthValue;
             int previousMaxEnergyValue = MaxEnergyValue;
             InitializeStats(); // Updates stats after level up
             
-            // Adjust CurrentEnergyValue proportionally to the increase in MaxEnergyValue
+            // Adjust CurrentXXXValue proportionally to the increase in MaxXXXValue
+            CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
             CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
 
-            // Ensure CurrentEnergyValue does not exceed MaxEnergyValue
+            // Ensure CurrentXXXValue does not exceed MaxXXXValue
+            if (CurrentHealthValue > MaxHealthValue)
+                CurrentHealthValue = MaxHealthValue;
+            
             if (CurrentEnergyValue > MaxEnergyValue)
                 CurrentEnergyValue = MaxEnergyValue;
         }
