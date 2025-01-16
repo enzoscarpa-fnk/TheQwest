@@ -55,11 +55,11 @@ namespace JDR.Models
             int previousMaxEnergyValue = MaxEnergyValue;
             InitializeStats(); // Updates stats after level up
             
-            // Adjust CurrentXXXValue proportionally to the increase in MaxXXXValue
+            // Adjust CurrentHealthValue & CurrentEnergyValue proportionally to the increase in MaxHealthValue & MaxEnergyValue
             CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
             CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
 
-            // Ensure CurrentXXXValue does not exceed MaxXXXValue
+            // Ensure CurrentHealthValue & CurrentEnergyValue does not exceed MaxHealthValue & MaxEnergyValue
             if (CurrentHealthValue > MaxHealthValue)
                 CurrentHealthValue = MaxHealthValue;
             
