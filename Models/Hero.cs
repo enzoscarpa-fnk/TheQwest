@@ -45,9 +45,9 @@ namespace JDR.Models
             }
         }
 
-        public void RegenEnergy()
+        public void RegenEnergy(int? regen = null)
         {
-            CurrentEnergyValue = Math.Min(CurrentEnergyValue + Spirit, MaxEnergyValue);
+            CurrentEnergyValue = regen.HasValue ? Math.Min(CurrentEnergyValue + regen.Value, MaxEnergyValue) : Math.Min(CurrentEnergyValue + Spirit, MaxEnergyValue);
         }
         
         public void RegenEnergyLow()

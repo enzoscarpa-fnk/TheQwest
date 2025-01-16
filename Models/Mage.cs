@@ -51,13 +51,18 @@ namespace JDR.Models
         protected override void LevelUp()
         {
             base.LevelUp();
+            int previousMaxHealthValue = MaxHealthValue;
             int previousMaxEnergyValue = MaxEnergyValue;
             InitializeStats(); // Updates stats after level up
             
-            // Adjust CurrentEnergyValue proportionally to the increase in MaxEnergyValue
+            // Adjust CurrentHealthValue & CurrentEnergyValue proportionally to the increase in MaxHealthValue & MaxEnergyValue
+            CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
             CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
 
-            // Ensure CurrentEnergyValue does not exceed MaxEnergyValue
+            // Ensure CurrentHealthValue & CurrentEnergyValue does not exceed MaxHealthValue & MaxEnergyValue
+            if (CurrentHealthValue > MaxHealthValue)
+                CurrentHealthValue = MaxHealthValue;
+            
             if (CurrentEnergyValue > MaxEnergyValue)
                 CurrentEnergyValue = MaxEnergyValue;
         }
@@ -126,7 +131,7 @@ namespace JDR.Models
                 return false;
             }
 
-            CurrentEnergyValue -= 4;
+            CurrentEnergyValue -= 14;
             int originalArmorValue = target.ArmorValue;
             target.ArmorValue *= 4;
 
@@ -158,7 +163,7 @@ namespace JDR.Models
                 return true;
             }
 
-            CurrentEnergyValue -= 18;
+            CurrentEnergyValue -= 26;
             int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 6.9);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
         

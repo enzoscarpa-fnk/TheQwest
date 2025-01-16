@@ -174,3 +174,67 @@ body {
 button:focus {
     outline: 2px solid #0063d6;
 }
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.spell-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 2px;
+    border: 2px solid #fff;
+    transition: transform 0.2s ease;
+}
+
+.flee-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 2px;
+    border: 2px solid #fff;
+    transition: transform 0.2s ease;
+}
+
+.spell-spacer {
+    width: 15px;
+    height: 40px;
+    margin: 2px;
+}
+
+.spell-icon:hover, .flee-icon:hover {
+    transform: scale(1.1);
+}
+
+.popup-text {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    transform: translateX(-0%);
+    width: 180px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+    z-index: 1;
+    font-size: 0.85em;
+    border: 2px solid red;
+}
+
+.spell-title {
+    font-size: 1.15em;
+    color: darkorange;
+}
+
+.image-container .flee-icon + .popup-text, .image-container .flee-icon:hover + .popup-text {
+    top: 110%;
+    left: 100%;
+    transform: translateX(-100%);
+}
+
+.image-container:hover .popup-text {
+    display: block;
+}
