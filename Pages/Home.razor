@@ -36,8 +36,14 @@
             <!-- Hero inventory component -->
             <div id="hero-inventory">
                 <h4>Inventory</h4>
-                <div class="inventory">
-                    <p><strong>[Inventory Content]</strong></p>
+                <p><strong>[Inventory Content]</strong></p>
+                <div class="inventory-grid">
+                    @foreach (var item in inventory.Items)
+                    {
+                        <div class="inventory-cell">
+                            @item.Name
+                        </div>
+                    }
                 </div>
             </div>
         } else {   
@@ -78,7 +84,8 @@
                         OnHeroStatsUpdated="UpdateHeroStats"
                         OnFightStateChange="HandleFightStateChange"
                         OnFight="HandleFight"
-                        IsFighting="(() => isFighting)" />
+                        IsFighting="(() => isFighting)" 
+                        Inventory="inventory"/>
 
                     @if (isFighting)
                     {
@@ -134,6 +141,7 @@
 }
 
 @code {
+    public Inventory inventory { get; set; } = new Inventory();
     // Fight component properties
     private Hero? hero;
     private Monster? monster;

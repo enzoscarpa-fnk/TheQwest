@@ -34,6 +34,7 @@
     [Parameter] public EventCallback<Monster> OnFight { get; set; } // Get infos of the monster for the fight
     [Parameter] public EventCallback<bool> OnFightStateChange { get; set; } // Notifies state of isFighting in Home.razor (true/false)
     [Parameter] public Func<bool>? IsFighting { get; set; }
+    [Parameter] public Inventory Inventory { get; set; } = null!;
     
     private Map map;
     private ElementReference gridRef;
@@ -123,7 +124,7 @@
         var chest = map.Treasures.FirstOrDefault(t => (t.X, t.Y) == playerPosition);
         if (chest != null)
         {
-            Treasure.FoundChest(Hero);
+            Treasure.FoundChest(Hero, Inventory);
             map.Treasures.Remove(chest);
             StateHasChanged();
         }

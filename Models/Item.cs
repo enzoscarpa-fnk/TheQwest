@@ -2,17 +2,17 @@ namespace JDR.Models
 {
     public class Item
     {
-        public string Name { get; }
-        public int StaminaBonus { get; }
-        public int StrengthBonus { get; }
-        public int IntellectBonus { get; }
-        public int AgilityBonus { get; }
-        public int SpiritBonus { get; }
-        public int ArmorBonus { get; }
-        public int DamageBonus { get; }
-        public int CriticalChanceBonus { get; }
-        public int HasteBonus { get; }
-        public int DodgeBonus { get; }
+        public string Name { get; set; }
+        public int StaminaBonus { get; set; }
+        public int StrengthBonus { get; set; }
+        public int IntellectBonus { get; set; }
+        public int AgilityBonus { get; set; }
+        public int SpiritBonus { get; set; }
+        public int ArmorBonus { get; set; }
+        public int DamageBonus { get; set; }
+        public int CriticalChanceBonus { get; set; }
+        public int HasteBonus { get; set; }
+        public int DodgeBonus { get; set; }
 
         public Item(
             string name,
