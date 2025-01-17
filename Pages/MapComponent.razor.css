@@ -20,10 +20,8 @@
 
 
 .heroSprite {
-    background-image: url('./images/Hero_Walk1.gif');
+    background-image: url('./images/Hero_Walk2.gif');
     background-repeat: no-repeat;
-    background-size: 100px;
-    background-position: center;
     background-size: 100px;
     background-position: center;
 }
@@ -55,29 +53,21 @@
 }
 
 .monster {
-    background-image: url('./images/Goblin_Idle.gif');
-    background-repeat: no-repeat;
-    background-size: 100px;
-    background-position: center;
-    background-image: url('./images/Goblin_Idle.gif');
+    background-image: url('./images/Goblin_Idle2.gif');
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
 }
 
 .boss {
-    background-image: url('./images/Skeleton_Idle.gif');
-    background-repeat: no-repeat;
-    background-size: 100px;
-    background-position: center;
-    background-image: url('./images/Skeleton_Idle.gif');
+    background-image: url('./images/Skeleton_Idle2.gif');
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
 }
 
 .fountain {
-    background-image: url('./images/fountain.gif');
+    background-image: url('./images/fountain2.gif');
     background-repeat: no-repeat;
     background-size: 50px;
     background-position: center;
