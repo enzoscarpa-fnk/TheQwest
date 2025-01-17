@@ -30,9 +30,9 @@
 .heroSprite {
     width: 64px; /* width of frame */
     height: 64px; /* height of frame */
-    background-image: url('./images/Run-Sheet.png');
+    background-image: url('./images/Hero_Walk.png');
     background-repeat: no-repeat;
-    animation: heroSpriteAnimation 0.8s steps(6) infinite;
+    animation: heroSpriteAnimation 0.8s steps(8) infinite;
     transform-origin: center center;
 }
 
