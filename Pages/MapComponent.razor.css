@@ -24,6 +24,8 @@
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
+    background-size: 100px;
+    background-position: center;
 }
 
 @keyframes treasureSpriteAnimation {
@@ -57,6 +59,10 @@
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
+    background-image: url('./images/Goblin_Idle.gif');
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
 }
 
 .boss {
@@ -64,10 +70,13 @@
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
+    background-image: url('./images/Skeleton_Idle.gif');
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
 }
 
 .fountain {
-    background-color: lightblue;
     background-image: url('./images/fountain.gif');
     background-repeat: no-repeat;
     background-size: 50px;
