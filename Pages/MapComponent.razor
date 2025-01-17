@@ -33,6 +33,7 @@
     [Parameter] public EventCallback<Hero> OnHeroStatsUpdated { get; set; }
     [Parameter] public EventCallback<Monster> OnFight { get; set; } // Get infos of the monster for the fight
     [Parameter] public EventCallback<bool> OnFightStateChange { get; set; } // Notifies state of isFighting in Home.razor (true/false)
+    [Parameter] public EventCallback<bool> OnInventoryUpdated { get; set; }
     [Parameter] public Func<bool>? IsFighting { get; set; }
     [Parameter] public Inventory Inventory { get; set; } = null!;
     
@@ -44,6 +45,7 @@
     private bool isFighting;
     private List<Monster> monsters = new();
     private List<LifeFountain> fountains = new();
+    private List<Treasure> treasures = new();
 
     protected override void OnInitialized()
     {
@@ -54,6 +56,7 @@
                 map = new Map(10, 10, Hero); // 10x10 Grid
                 monsters = map.Monsters;
                 fountains = map.Fountains;
+                treasures = map.Treasures;
             }
         }
         catch (Exception ex)
@@ -126,7 +129,9 @@
         {
             Treasure.FoundChest(Hero, Inventory);
             map.Treasures.Remove(chest);
+            OnInventoryUpdated.InvokeAsync(true);
             StateHasChanged();
+            // OnInventoryUpdated.InvokeAsync(false);
         }
     }
     

@@ -181,7 +181,7 @@ button:focus {
     gap: 10px; /* Espacement entre les cellules */
     padding: 10px;
     border: 1px solid #ccc; /* Optionnel : bordure pour le conteneur */
-    background-color: #f9f9f9; /* Couleur de fond pour l'inventaire */
+    background-color: #1a1e21; /* Couleur de fond pour l'inventaire */
 }
 
 .inventory-cell {
@@ -191,7 +191,7 @@ button:focus {
     align-items: center;
     justify-content: center;
     border: 1px solid #ccc; /* Bordure des cases */
-    background-color: #fff; /* Couleur de fond des cases */
+    background-color: #4a4a4a; /* Couleur de fond des cases */
     border-radius: 5px; /* Coins arrondis */
     font-size: 14px; /* Taille de texte */
     text-align: center; /* Centrage du texte */

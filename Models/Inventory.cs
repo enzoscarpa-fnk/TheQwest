@@ -9,6 +9,17 @@ namespace JDR.Models
         {
             Items = new List<Item>();
         }
+        public void CheckGameOver(bool isGameOver)
+        {
+            if (isGameOver)
+            {
+                Clear();
+            }
+        }
+        public void Clear()
+        {
+            Items.Clear();
+        }
         public int InventoryLenght = 12;
         public void AddItem(Item item)
         {
