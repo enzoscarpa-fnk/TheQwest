@@ -13,27 +13,16 @@
     width: 64px;
     height: 64px;
     background-color: lightgray;
-    border: 1px solid #ddd;
+    background-image: url('./images/Tileset.png');
 }
 
-@keyframes heroSpriteAnimation {
-    from {
-        background-position: 0;
-    }
 
-    to {
-        background-position: -384px;
-    }
-    /* 64px x 6 frames */
-}
 
 .heroSprite {
-    width: 64px; /* width of frame */
-    height: 64px; /* height of frame */
-    background-image: url('./images/Hero_Walk.png');
+    background-image: url('./images/Hero_Walk.gif');
     background-repeat: no-repeat;
-    animation: heroSpriteAnimation 0.8s steps(8) infinite;
-    transform-origin: center center;
+    background-size: 100px;
+    background-position: center;
 }
 
 @keyframes treasureSpriteAnimation {
@@ -63,15 +52,20 @@
 }
 
 .monster {
-    background-color: #d9534f;
+    background-image: url('./images/Goblin_Idle.gif');
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
 }
 
 .boss {
-    background-color: #444444;
+    background-image: url('./images/Skeleton_Idle.gif');
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
 }
 
 .fountain {
-    background-color: lightblue;
     background-image: url('./images/fountain.gif');
     background-repeat: no-repeat;
     background-size: 50px;
