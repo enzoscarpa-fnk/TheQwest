@@ -51,13 +51,18 @@ namespace JDR.Models
         protected override void LevelUp()
         {
             base.LevelUp();
+            int previousMaxHealthValue = MaxHealthValue;
             int previousMaxEnergyValue = MaxEnergyValue;
             InitializeStats(); // Updates stats after level up
             
-            // Adjust CurrentEnergyValue proportionally to the increase in MaxEnergyValue
+            // Adjust CurrentHealthValue & CurrentEnergyValue proportionally to the increase in MaxHealthValue & MaxEnergyValue
+            CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
             CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
 
-            // Ensure CurrentEnergyValue does not exceed MaxEnergyValue
+            // Ensure CurrentHealthValue & CurrentEnergyValue does not exceed MaxHealthValue & MaxEnergyValue
+            if (CurrentHealthValue > MaxHealthValue)
+                CurrentHealthValue = MaxHealthValue;
+            
             if (CurrentEnergyValue > MaxEnergyValue)
                 CurrentEnergyValue = MaxEnergyValue;
         }
@@ -66,18 +71,25 @@ namespace JDR.Models
         public override void BaseAttack(Character target, Action restartGameAction)
         {
             if (target.CurrentHealthValue == 0) { return; }
+            
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+            }
+            else
+            {
+                int baseDamage = AttackValue + BonusDamage - target.ArmorValue;
+                int damage = baseDamage <= 0 ? 0 : baseDamage;
+
+                int calculatedDamage = CriticalHit(damage, out bool isCritical);
+
+                string message = isCritical ? "Critical hit! " : "";
+                message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
+
+                Console.WriteLine(message);
         
-            int baseDamage = AttackValue + BonusDamage - target.ArmorValue;
-            int damage = baseDamage <= 0 ? 0 : baseDamage;
-
-            int calculatedDamage = CriticalHit(damage, out bool isCritical);
-
-            string message = isCritical ? "Critical hit! " : "";
-            message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
-
-            Console.WriteLine(message);
-        
-            target.TakeDamage(calculatedDamage, this, restartGameAction);
+                target.TakeDamage(calculatedDamage, this, restartGameAction);
+            }
         }
 
         // Low tier spell
@@ -87,6 +99,12 @@ namespace JDR.Models
             {
                 Console.WriteLine("Not enough Mana");
                 return false;
+            }
+            
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+                return true;
             }
        
             CurrentEnergyValue -= 6;
@@ -113,7 +131,7 @@ namespace JDR.Models
                 return false;
             }
 
-            CurrentEnergyValue -= 4;
+            CurrentEnergyValue -= 14;
             int originalArmorValue = target.ArmorValue;
             target.ArmorValue *= 4;
 
@@ -138,7 +156,14 @@ namespace JDR.Models
                 Console.WriteLine("Not enough Mana");
                 return false;
             }
-            CurrentEnergyValue -= 18;
+            
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+                return true;
+            }
+
+            CurrentEnergyValue -= 26;
             int baseDamage = (int)Math.Round((AttackValue + BonusDamage - target.ArmorValue) * 6.9);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
         

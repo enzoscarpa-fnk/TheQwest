@@ -108,10 +108,59 @@
                         <p><strong>Level </strong> @hero?.Level</p>
                         <p><strong>Health:</strong> @hero?.CurrentHealthValue / @hero?.MaxHealthValue HP</p>
                         <p><strong>Energy:</strong> @hero?.CurrentEnergyValue / @hero?.MaxEnergyValue Mana</p>
-                        <button class="btn btn-danger" @onclick="HeroBaseAttack">Base Attack</button>
-                        <button class="btn btn-danger" @onclick="HeroLowTierAttack">Frost Spikes</button>
-                        <button class="btn btn-danger" @onclick="HeroMidTierAttack">Arcane Shield</button>
-                        <button class="btn btn-danger" @onclick="HeroUltimateAttack">Meteor Blast</button>
+
+                        <div class="image-container">
+                            <img src="images/attack.bmp" alt="Base Attack" class="spell-icon" @onclick="HeroBaseAttack" />
+                            <div class="popup-text">
+                                <span class="spell-title"><strong>Base Attack</strong></span>
+                                <span><br />Cost: 0 Mana</span>
+                                <span><br />A swift attack with bare hands or a weapon.</span>
+                                <span><br />Base damage: @Math.Round((decimal)(hero?.AttackValue - monster.ArmorValue))</span>
+                            </div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="images/frost.bmp" alt="Frost Spikes" class="spell-icon" @onclick="HeroLowTierAttack" />
+                            <div class="popup-text">
+                                <span class="spell-title"><strong>Frost Spikes</strong></span>
+                                <span><br />Cost: 6 Mana</span>
+                                <span><br />Casts frost spikes that deals Frost damages.</span>
+                                <span><br />Base damage: @Math.Round((decimal)((hero?.AttackValue - monster.ArmorValue) * 2.4))<br /></span>
+                            </div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="images/shield.bmp" alt="Arcane Shield" class="spell-icon" @onclick="HeroMidTierAttack" />
+                            <div class="popup-text">
+                                <span class="spell-title"><strong>Arcane Shield</strong></span>
+                                <span><br />Cost: 14 Mana</span>
+                                <span><br />Invokes an Arcane shield around you. Your armor value is now quadrupled.</span>
+                                <span><br />Armor value: @Math.Round((decimal)(hero?.ArmorValue * 4))</span>
+                            </div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="images/meteor.bmp" alt="Meteor Blast" class="spell-icon" @onclick="HeroUltimateAttack" />
+                            <div class="popup-text">
+                                <span class="spell-title"><strong>Meteor Blast</strong></span>
+                                <span><br />Cost: 26 Mana</span>
+                                <span><br />Casts a powerful meteor blast that deals Fire damages.</span>
+                                <span><br />Base damage: @Math.Round((decimal)((hero?.AttackValue - monster.ArmorValue) * 6.9))</span>
+                            </div>
+                        </div>
+                        
+                        <div class="image-container">
+                            <div class="spell-spacer"></div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="images/flee.bmp" alt="Flee" class="flee-icon" @onclick="TryToFlee" />
+                            <div class="popup-text">
+                                <span class="spell-title"><strong>Flee</strong></span>
+                                <span><br />Makes you try to escape the fight. Ennemy attacks before fleeing.</span>
+                                <span><br />Success rate: 80%</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="opponent">
                         <h4><strong>@monster?.Name</strong></h4>
@@ -142,6 +191,7 @@
 
 @code {
     private Inventory inventory { get; set; } = new();
+
     // Fight component properties
     private Hero? hero;
     private Monster? monster;
@@ -150,6 +200,7 @@
     private string? CharacterName;
     private string? CharacterClass;
     private bool isInventoryUpdated;
+    private Random random = new Random();
 
     // Map component properties
     private MapComponent mapComponent = null!;
@@ -176,9 +227,11 @@
             {
                 MonsterAttack();
             }
+
             StateHasChanged();
         }
     }
+
     private void HeroLowTierAttack()
     {
         if (hero != null && monster != null && hero.LowTierAttack(monster, null))
@@ -191,9 +244,11 @@
             {
                 mapComponent.EndFight(); // Ends fight when monster is killed
             }
+
             StateHasChanged();
         }
     }
+
     private void HeroMidTierAttack()
     {
         if (hero != null && monster != null && hero.MidTierAttack(null, StateHasChanged))
@@ -206,9 +261,11 @@
             {
                 mapComponent.EndFight(); // Ends fight when monster is killed
             }
+
             StateHasChanged();
         }
     }
+
     private void HeroUltimateAttack()
     {
         if (hero != null && monster != null && mapComponent != null && hero.UltimateAttack(monster, null))
@@ -221,22 +278,45 @@
             {
                 mapComponent.EndFight(); // Ends fight when monster is killed
             }
+
             StateHasChanged();
         }
     }
-    
+
+    private void TryToFlee()
+    {
+        if (hero != null && monster != null && mapComponent != null)
+        {
+            Console.WriteLine($"{hero?.Name} tries to flee...");
+            int fleeChance = 80;
+            int roll = random.Next(1, 101);
+
+            if (roll <= fleeChance)
+            {
+                MonsterAttack();
+                Console.WriteLine($"{hero?.Name} took some damage by {monster?.Name} while fleeing !");
+                mapComponent.EndFight(true);
+            }
+            else
+            {
+                Console.WriteLine($"{hero?.Name} couldn't flee !");
+                MonsterAttack();
+            }
+        }
+    }
+
     private void HandleFight(Monster monster)
     {
         this.monster = monster; // Met à jour le monstre
         StateHasChanged();
     }
-    
+
     private void HandleFightStateChange(bool state)
     {
         isFighting = state;
         StateHasChanged();
     }
-    
+
 
     // Manages the monsters' attacks
     private void MonsterAttack()
@@ -246,12 +326,13 @@
             monster.BaseAttack(hero, GameOver);
             StateHasChanged();
         }
+
         if (hero.CurrentHealthValue == 0)
         {
             SetGameOver(true);
         }
     }
-              
+
     private void UpdateHeroStats(Hero updatedHero)
     {
         StateHasChanged();
@@ -267,7 +348,7 @@
         hero = Hero.CreateHero(CharacterClass, CharacterName);
         heroCreated = true;
     }
-    
+
     private void GameOver()
     {
         SetGameOver (true);
