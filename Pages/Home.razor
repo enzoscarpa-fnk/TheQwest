@@ -37,7 +37,13 @@
             <div id="hero-inventory">
                 <h4>Inventory</h4>
                 <div class="inventory-grid">
-                    @foreach (var item in inventory.Items)
+                    @foreach (var item in inventory.weaponItems)
+                    {
+                        <div class="inventory-cell">
+                            @item.Name
+                        </div>
+                    }
+                    @foreach (var item in inventory.armorItems)
                     {
                         <div class="inventory-cell">
                             @item.Name

@@ -13,8 +13,15 @@ namespace JDR.Models
             var newItem = RandomItem(hero);
             if (newItem != null)
             {
-                inventory.AddItem(newItem); // Ajoute l'objet à l'inventaire du héros
-                Console.WriteLine($"You found a new item: {newItem.Name}");
+                if (newItem is Weapon)
+                {
+                    inventory.AddWeaponItem(newItem);
+                }
+                else if (newItem is Armor)
+                {
+                    inventory.AddArmorItem(newItem); 
+                }
+                hero.TryEquipItem(newItem);
             }
         }
        public static Item RandomItem(Hero hero)
@@ -23,16 +30,14 @@ namespace JDR.Models
 
             if (roll == 1) // 50% chance to have weapon
             {
-                Weapon new_weapon = new Weapon(hero, "arme", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                Weapon new_weapon = new Weapon(hero, "weapon", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 Console.WriteLine($"You have just found {new_weapon} !");
-                hero.EquipItem(new_weapon);
                 return new_weapon;
             }
             else if (roll == 2) // 50% chance to have armor
             {
-                Armor new_armor = new Armor(hero, "armure", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                Armor new_armor = new Armor(hero, "armor", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 Console.WriteLine($"You have just found {new_armor} !");
-                hero.EquipItem(new_armor);
                 return new_armor;
             }
             return null;

@@ -4,10 +4,12 @@ namespace JDR.Models
 {
     public class Inventory
     {
-        public List<Item> Items {get; private set; }
+        public List<Item> weaponItems {get; private set; }
+        public List<Item> armorItems {get; private set; }
         public Inventory()
         {
-            Items = new List<Item>();
+            weaponItems = new List<Item>();
+            armorItems = new List<Item>();
         }
         public void CheckGameOver(bool isGameOver)
         {
@@ -18,31 +20,64 @@ namespace JDR.Models
         }
         public void Clear()
         {
-            Items.Clear();
+            weaponItems.Clear();
+            armorItems.Clear();
         }
         public int InventoryLenght = 12;
-        public void AddItem(Item item)
+        public void AddWeaponItem(Item item)
         {
             if (item != null)
             {
-                Items.Add(item);
+                weaponItems.Add(item);
+            }
+        }
+        public void AddArmorItem(Item item)
+        {
+            if (item != null)
+            {
+                armorItems.Add(item);
             }
         }
         public void RemoveItem(Item item)
         {
             if (item != null)
             {
-                Items.Remove(item);
+                weaponItems.Remove(item);
             }
+        // Pour mettre en place le remove de l'ancienne arme/armure (Si + puissant trouvé) 
+        // if (item == weapon)
+        //     {
+        //         if (weaponItems.Contains(item))
+        //         {
+        //             weaponItems.Remove(item);
+        //             Console.WriteLine($"Item {item.Name} removed from inventory.");
+        //         }
+        //         else
+        //         {
+        //             Console.WriteLine($"Item {item.Name} not found in inventory.");
+        //         }
+        //     }
+        //     else if (item == armor)
+        //     {
+        //         if (armorItems.Contains(item))
+        //         {
+        //             armorItems.Remove(item);
+        //             Console.WriteLine($"Item {item.Name} removed from inventory.");
+        //         }
+        //         else
+        //         {
+        //             Console.WriteLine($"Item {item.Name} not found in inventory.");
+        //         }
+        //     }
         }
         public void AfficherInventaire()
         {
-            if (Items.Count == 0)
+            if (weaponItems.Count == 0)
             {
                 Console.WriteLine("L'inventaire est vide");
                 return;
             }
-            foreach (var item in Items)
+            foreach (var item in weaponItems)
             {
                 Console.WriteLine(item);
             }

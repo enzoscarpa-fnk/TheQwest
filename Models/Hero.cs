@@ -1,3 +1,5 @@
+using System.Threading.Channels;
+
 namespace JDR.Models
 {
     public abstract class Hero : Character
@@ -14,6 +16,9 @@ namespace JDR.Models
         public int Agility { get; set; }
         public int Spirit { get; set; }
         public int BonusDamage { get; set; }
+        public Weapon EquippedWeapon { get; private set; }
+        public Armor EquippedArmor { get; private set; }
+        public Inventory inventory;
 
         public Hero(
             string characterName,
@@ -106,6 +111,57 @@ namespace JDR.Models
             DodgeRating += item.DodgeBonus;
 
             Console.WriteLine($"{Name} equipped {item.Name}.");
+        }
+
+        public bool TryEquipItem (Item item)
+        {
+            if (item is Weapon weapon)
+            {
+                if (EquippedWeapon == null || weapon.DamageBonus > EquippedWeapon.DamageBonus)
+                {
+                    if (EquippedWeapon != null)
+                    {
+                        BonusDamage -= EquippedWeapon.DamageBonus;
+                    }
+
+                    BonusDamage += weapon.DamageBonus;
+                    EquippedWeapon = weapon;
+
+                    Console.WriteLine($"{Name} equipped a new weapon: {weapon.Name}");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"{Name} chose not to equip the weapon {weapon.Name} as it is weaker.");
+                    return false;
+                }
+            }
+            else if (item is Armor armor)
+            {
+                if (EquippedArmor == null || armor.ArmorBonus > EquippedArmor.ArmorBonus)
+                {
+                    if (EquippedArmor != null)
+                    {
+                        ArmorValue -= EquippedArmor.ArmorBonus;
+                    }
+
+                    ArmorValue += armor.ArmorBonus;
+                    EquippedArmor = armor;
+                    
+                    Console.WriteLine($"{Name} equipped new armor : {armor.Name}");
+                    return true;
+                }
+                else 
+                {
+                    Console.WriteLine($"{Name} chose not to equip the armor {armor.Name} as it is weaker.");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Item {item.Name} is not a weapon or armor and he can be equipped.");
+                return false;
+            }
         }
 
         public static Hero CreateHero(string heroType, string name)

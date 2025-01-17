@@ -177,11 +177,11 @@ button:focus {
 
 .inventory-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 4 colonnes */
-    gap: 10px; /* Espacement entre les cellules */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px;
     padding: 10px;
-    border: 1px solid #ccc; /* Optionnel : bordure pour le conteneur */
-    background-color: #1a1e21; /* Couleur de fond pour l'inventaire */
+    border: 1px solid #ccc; 
+    background-color: #1a1e21;
 }
 
 .inventory-cell {
@@ -190,11 +190,11 @@ button:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #ccc; /* Bordure des cases */
-    background-color: #4a4a4a; /* Couleur de fond des cases */
-    border-radius: 5px; /* Coins arrondis */
-    font-size: 14px; /* Taille de texte */
-    text-align: center; /* Centrage du texte */
+    border: 1px solid #ccc;
+    background-color: #4a4a4a; 
+    border-radius: 5px; 
+    font-size: 14px; 
+    text-align: center; 
 }
 
 .image-container {
