@@ -30,22 +30,22 @@ namespace JDR.Models
             Fountains.Clear(); // Clears fountains list
             Treasures.Clear(); // Clears treasures list
 
-            // Generates 5 monsters at random location
-            for (int i = 0; i < 5; i++)
+            // Generates 11 monsters at random location
+            for (int i = 0; i < 11; i++)
             {
                 (int x, int y) = GetRandomPosition();
                 Monsters.Add(new MonsterGoblin(x, y, hero.Level));
             }
 
-            // Generates 4 fountains at random location
-            for (int i = 0; i < 4; i++)
+            // Generates 5 fountains at random location
+            for (int i = 0; i < 5; i++)
             {
                 (int x, int y) = GetRandomPosition();
                 Fountains.Add(new LifeFountain(x, y));
             }
             
-            // Generates 2 chests at random location
-            for (int i = 0; i < 2; i++)
+            // Generates 3 chests at random location
+            for (int i = 0; i < 3; i++)
             {
                 (int x, int y) = GetRandomPosition();
                 Treasures.Add(new Treasure(x, y));
