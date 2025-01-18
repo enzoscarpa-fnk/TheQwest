@@ -5,17 +5,15 @@
 
 <PageTitle>JDR</PageTitle>
 
-<div id="header">
-    <h4>[Game name banner goes here]</h4>
-</div>
-
 <!-- Game container: Contains left, center and right panel -->
 <div id="game-container">
 
     <!-- Left panel: Hero setup, stats and inventory -->
     <div id="left-panel">
+        <img src="./images/the_qwest.png" alt="The Qwest Banner" />
         @if (heroCreated)
-        {   <!-- Hero stats component -->
+        {
+            <!-- Hero stats component -->
             <div id="hero-stats">
                 <h4>Hero Stats</h4>
                 <div class="stats">
@@ -51,15 +49,17 @@
                     }
                 </div>
             </div>
-        } else {   
+        }
+        else
+        {
             <!-- Hero creation component -->
             <h4>Create your hero</h4>
             <form @onsubmit="StartGame">
                 <div>
                     <label for="characterName">Name your hero :</label><br/>
-                    <input type="text" id="characterName" @bind="CharacterName" required />
+                    <input type="text" id="characterName" @bind="CharacterName" required/>
                 </div>
-                <br />
+                <br/>
                 <div>
                     <label for="characterClass">Choose a class :</label><br/>
                     <select id="characterClass" @bind="CharacterClass" required>
@@ -69,7 +69,7 @@
                         <option value="Archer" disabled>Archer</option>
                     </select>
                 </div>
-                <br />
+                <br/>
                 <button class="btn btn-danger" type="submit">Start the game!</button>
             </form>
         }
