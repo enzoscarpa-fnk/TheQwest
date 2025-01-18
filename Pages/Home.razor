@@ -36,8 +36,19 @@
             <!-- Hero inventory component -->
             <div id="hero-inventory">
                 <h4>Inventory</h4>
-                <div class="inventory">
-                    <p><strong>[Inventory Content]</strong></p>
+                <div class="inventory-grid">
+                    @foreach (var item in inventory.weaponItems)
+                    {
+                        <div class="inventory-cell">
+                            @item.Name
+                        </div>
+                    }
+                    @foreach (var item in inventory.armorItems)
+                    {
+                        <div class="inventory-cell">
+                            @item.Name
+                        </div>
+                    }
                 </div>
             </div>
         } else {   
@@ -77,8 +88,10 @@
                         HeroCreated="heroCreated"
                         OnHeroStatsUpdated="UpdateHeroStats"
                         OnFightStateChange="HandleFightStateChange"
+                        OnInventoryUpdated="UpdateInventory"
                         OnFight="HandleFight"
-                        IsFighting="(() => isFighting)" />
+                        IsFighting="(() => isFighting)" 
+                        Inventory="inventory"/>
 
                     @if (isFighting)
                     {
@@ -183,6 +196,7 @@
 }
 
 @code {
+    private Inventory inventory { get; set; } = new();
 
     // Fight component properties
     private Hero? hero;
@@ -191,11 +205,19 @@
     private bool heroCreated;
     private string? CharacterName;
     private string? CharacterClass;
+    private bool isInventoryUpdated;
     private Random random = new Random();
 
     // Map component properties
     private MapComponent mapComponent = null!;
     private bool isGameOver = false;
+
+    // Set Game Over
+    private void SetGameOver(bool state)
+    {
+        isGameOver = state;
+        inventory.CheckGameOver(isGameOver);
+    }
 
     // Fight component methods
     private void HeroBaseAttack()
@@ -313,13 +335,18 @@
 
         if (hero.CurrentHealthValue == 0)
         {
-            isGameOver = true;
+            SetGameOver(true);
         }
     }
 
     private void UpdateHeroStats(Hero updatedHero)
     {
         StateHasChanged();
+    }
+
+    private void UpdateInventory(bool state)
+    {
+        isInventoryUpdated = state;
     }
 
     private void StartGame()
@@ -330,7 +357,7 @@
 
     private void GameOver()
     {
-        isGameOver = true;
+        SetGameOver (true);
     }
 
     // Restarts a new game
@@ -338,7 +365,7 @@
     {
         heroCreated = false;
         isFighting = false;
-        isGameOver = false; // Turns off the game over popup
+        SetGameOver(false); // Turns off the game over popup
     }
 
     // OnInitialized method

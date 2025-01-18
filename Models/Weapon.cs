@@ -4,18 +4,17 @@ namespace JDR.Models
     public enum WeaponType {sword, axe, mace}
     public enum MaterialWeapon {wood, stone, bone, metal, gold}
 
-    public class Weapon
+    public class Weapon : Item
     {
-        public string Name {get; set; }
         public MaterialWeapon MaterialType {get; set; }
         public WeaponType WeaponType {get; set; }
         public MaterialWeapon MaterialRandom {get; set; }
-        public int Damage {get; private set; }
-        private double speed;
-        public double Speed
+        // public int damageBonus {get; private set; }
+        private double haste;
+        public double Haste
         {
-            get { return speed; }
-            set { speed = Math.Round(value, 2); }
+            get { return haste; }
+            set { haste = Math.Round(value, 2); }
         }
         
         private double weight;
@@ -28,9 +27,31 @@ namespace JDR.Models
         
         private static Random random = new Random();
 
-        public Weapon (string name, Hero hero)
+        public Weapon(Hero hero,
+                    string name,
+                    int staminaBonus,
+                    int strengthBonus,
+                    int intellectBonus,
+                    int agilityBonus,
+                    int spiritBonus,
+                    int armorBonus,
+                    int damageBonus,
+                    int criticalChanceBonus,
+                    int hasteBonus,
+                    int dodgeBonus)
+                    : base(name)
         {
             Name = name;
+            StaminaBonus = staminaBonus;
+            StrengthBonus = strengthBonus;
+            IntellectBonus = intellectBonus;
+            AgilityBonus = agilityBonus;
+            SpiritBonus = spiritBonus;
+            ArmorBonus = armorBonus;
+            DamageBonus = damageBonus;
+            CriticalChanceBonus = criticalChanceBonus;
+            HasteBonus = hasteBonus;
+            DodgeBonus = dodgeBonus;
             MaterialRandom = MaterialChance(hero.Level);
             MaterialType = MaterialRandom;
             WeaponType = SetWeaponType();
@@ -47,21 +68,21 @@ namespace JDR.Models
                 case 1:
                     weaponType = WeaponType.sword;
                     SetAttributes(MaterialType);
-                    Speed *= 0.6;
+                    Haste *= 0.6;
                     Weight *= 0.1;
                     break;
 
                 case 2:
                     weaponType = WeaponType.axe;
                     SetAttributes(MaterialType);
-                    Speed *= 0.4;
+                    Haste *= 0.4;
                     Weight *= 0.3;
                     break;
 
                 case 3:
                     weaponType = WeaponType.mace;
                     SetAttributes(MaterialType);
-                    Speed *= 0.5;
+                    Haste *= 0.5;
                     Weight *= 0.2;
                     break;
 
@@ -137,39 +158,39 @@ namespace JDR.Models
         {
             switch (MaterialType)
             {
-                case MaterialWeapon.wood:
-                    Damage = random.Next(4, 10);
-                    Speed = 20;
+                case MaterialWeapon.wood: 
+                    DamageBonus = random.Next(4,10);
+                    Haste = 20;
                     Weight = 2;
                     break;
                 
                 case MaterialWeapon.stone:
-                    Damage = random.Next(10, 16);
-                    Speed = 15;
+                    DamageBonus = random.Next(10, 16);
+                    Haste = 15;
                     Weight = 4;
                     break;
 
                 case MaterialWeapon.bone:
-                    Damage = random.Next(16, 21);
-                    Speed = 17;
+                    DamageBonus = random.Next(16, 21);
+                    Haste = 17;
                     Weight = 6;
                     break;
                 
                 case MaterialWeapon.metal:
-                    Damage = random.Next(21, 27);
-                    Speed = 13;
+                    DamageBonus = random.Next(21, 27);
+                    Haste = 13;
                     Weight = 8;
                     break;
                 
                 case MaterialWeapon.gold:
-                    Damage = random.Next(27, 32);
-                    Speed = 11;
+                    DamageBonus = random.Next(27, 32);
+                    Haste = 11;
                     Weight = 10;
                     break;
                 
                 default:
-                    Damage = 1;
-                    Speed = 20;
+                    DamageBonus = 1;
+                    Haste = 20;
                     Weight = 0;
                     break;
             }
@@ -178,7 +199,7 @@ namespace JDR.Models
         public override string ToString()
         {
             return $"{Name}, a {WeaponType} made out of {MaterialType} ! \n" +
-            $"Damage : {Damage} | Speed : {Speed} | Weight : {Weight}";
+            $"Damage : {DamageBonus} | Speed : {Haste} | Weight : {Weight}";
         }
     }
 }

@@ -78,7 +78,7 @@ namespace JDR.Models
             }
             else
             {
-                int baseDamage = AttackValue - target.ArmorValue;
+                int baseDamage = AttackValue + BonusDamage - target.ArmorValue;
                 int damage = baseDamage <= 0 ? 0 : baseDamage;
 
                 int calculatedDamage = CriticalHit(damage, out bool isCritical);
@@ -108,7 +108,7 @@ namespace JDR.Models
             }
        
             CurrentEnergyValue -= 6;
-            int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 2.4);
+            int baseDamage = (int)Math.Round((AttackValue + BonusDamage - target.ArmorValue) * 2.4);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
         
             int calculatedDamage = CriticalHit(damage, out bool isCritical);
@@ -164,7 +164,7 @@ namespace JDR.Models
             }
 
             CurrentEnergyValue -= 26;
-            int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 6.9);
+            int baseDamage = (int)Math.Round((AttackValue + BonusDamage - target.ArmorValue) * 6.9);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
         
             int calculatedDamage = CriticalHit(damage, out bool isCritical);

@@ -3,23 +3,42 @@ namespace JDR.Models
 
     public enum MaterialArmor {cloth, leather, wood, metal, gold}
 
-    public class Armor
+    public class Armor : Item
     {
-        public string Name {get; set; }
         public MaterialArmor MaterialType {get; set; }
-        public int BaseDefense {get; private set; }
         public int Weight {get; private set; }
         public MaterialArmor MaterialRandom {get; set; }
         
         private static Random random = new Random();
 
-        public Armor (string name, Hero hero)
+        public Armor (Hero hero,
+                    string name,
+                    int staminaBonus,
+                    int strengthBonus,
+                    int intellectBonus,
+                    int agilityBonus,
+                    int spiritBonus,
+                    int armorBonus,
+                    int damageBonus,
+                    int criticalChanceBonus,
+                    int hasteBonus,
+                    int dodgeBonus)
+                    : base(name)
         {
             Name = name;
+            StaminaBonus = staminaBonus;
+            StrengthBonus = strengthBonus;
+            IntellectBonus = intellectBonus;
+            AgilityBonus = agilityBonus;
+            SpiritBonus = spiritBonus;
+            base.ArmorBonus = armorBonus;
+            DamageBonus = damageBonus;
+            CriticalChanceBonus = criticalChanceBonus;
+            HasteBonus = hasteBonus;
+            DodgeBonus = dodgeBonus;
             MaterialRandom = MaterialChance(hero.Level);
             MaterialType = MaterialRandom;
             SetAttributes(MaterialType);
-
         }
 
         // Random material type selection
@@ -87,32 +106,32 @@ namespace JDR.Models
             switch (MaterialType)
             {
                 case MaterialArmor.cloth:
-                    BaseDefense = random.Next(4, 10);
+                    ArmorBonus = random.Next(4, 10);
                     Weight = 2;
                     break;
                 
                 case MaterialArmor.leather:
-                    BaseDefense = random.Next(10, 16);
+                    ArmorBonus = random.Next(10, 16);
                     Weight = 4;
                     break;
 
                 case MaterialArmor.wood:
-                    BaseDefense = random.Next(16, 21);
+                    ArmorBonus = random.Next(16, 21);
                     Weight = 6;
                     break;
                 
                 case MaterialArmor.metal:
-                    BaseDefense = random.Next(21, 27);
+                    ArmorBonus = random.Next(21, 27);
                     Weight = 8;
                     break;
                 
                 case MaterialArmor.gold:
-                    BaseDefense = random.Next(27, 32);
+                    ArmorBonus = random.Next(27, 32);
                     Weight = 10;
                     break;
                 
                 default:
-                    BaseDefense = 1;
+                    ArmorBonus = 1;
                     Weight = 0;
                     break;
             }
@@ -120,7 +139,7 @@ namespace JDR.Models
         public override string ToString()
         {
             return $"{Name}, made out of {MaterialType} ! \n" +
-            $"Defense : {BaseDefense} | Weight : {Weight}";
+            $"Defense : {ArmorBonus} | Weight : {Weight}";
         }
     }
 }
