@@ -16,6 +16,9 @@ namespace JDR.Models
         public int Agility { get; set; }
         public int Spirit { get; set; }
         public int BonusDamage { get; set; }
+        public AttackInfo LowTierAttackInfo { get; protected set; }
+        public AttackInfo MidTierAttackInfo { get; protected set; }
+        public AttackInfo UltimateAttackInfo { get; protected set; }
         public Weapon EquippedWeapon { get; private set; }
         public Armor EquippedArmor { get; private set; }
         public Inventory inventory;
@@ -60,11 +63,93 @@ namespace JDR.Models
             CurrentEnergyValue = (int)Math.Min(CurrentEnergyValue + Math.Floor(Spirit * 0.5), MaxEnergyValue);
         }
 
-        public abstract bool LowTierAttack(Character target, Action action);
+        protected abstract void InitializeStats();
+
+        // Overrides the base LevelUp method to update the stats
+        protected void LevelUp()
+        {
+            ExperienceValue -= ExperienceToNextLevel;
+            Level++;
+            Console.WriteLine($"Yay ! {Name} reached level {Level} !");
+            OnLevelUp?.Invoke(); ;
+            int previousMaxHealthValue = MaxHealthValue;
+            int previousMaxEnergyValue = MaxEnergyValue;
+            InitializeStats(); // Updates stats after level up
+
+            // Adjust CurrentHealthValue & CurrentEnergyValue proportionally to the increase in MaxHealthValue & MaxEnergyValue
+            CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
+            CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
+
+            // Ensure CurrentHealthValue & CurrentEnergyValue does not exceed MaxHealthValue & MaxEnergyValue
+            if (CurrentHealthValue > MaxHealthValue)
+                CurrentHealthValue = MaxHealthValue;
+
+            if (CurrentEnergyValue > MaxEnergyValue)
+                CurrentEnergyValue = MaxEnergyValue;
+        }
+
+        public bool LowTierAttack(Character target, Action restartGameAction)
+        {
+            int cost = LowTierAttackInfo.Cost;
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < cost)
+            {
+                Console.WriteLine("Not enough Mana");
+                return false;
+            }
+            CurrentEnergyValue -= cost;
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+                return true;
+            }
+            int damage = Math.Max(0, (int)Math.Round((AttackValue - target.ArmorValue) * 2.4));
+
+            int calculatedDamage = CriticalHit(damage, out bool isCritical);
+
+            string message = isCritical ? "Critical hit! " : "";
+            message += $"{LowTierAttackInfo.Name} from {Name} dealt {calculatedDamage} damage to {target.Name}.";
+
+            Console.WriteLine(message);
+
+            target.TakeDamage(calculatedDamage, this, restartGameAction);
+            return true;
+        }
+
+            target.TakeDamage(calculatedDamage, this, restartGameAction);
+            return true;
+        }
 
         public abstract bool MidTierAttack(Character target, Action action);
 
-        public abstract bool UltimateAttack(Character target, Action action);
+        public bool UltimateAttack(Character target, Action restartGameAction)
+        {
+            int cost = UltimateAttackInfo.Cost;
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < cost)
+            {
+                Console.WriteLine("Not enough Mana");
+                return false;
+            }
+
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+                return true;
+            }
+
+            CurrentEnergyValue -= cost;
+            int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 5.9);
+            int damage = baseDamage <= 0 ? 0 : baseDamage;
+
+            int calculatedDamage = CriticalHit(damage, out bool isCritical);
+
+            string message = isCritical ? "Critical hit! " : "";
+            message += $"{UltimateAttackInfo.Name} from {Name} dealt {calculatedDamage} damage to {target.Name}.";
+
+            Console.WriteLine(message);
+
+            target.TakeDamage(calculatedDamage, this, restartGameAction);
+            return true;
+        }
 
         // Calculates the experience gained
         public void CalculateExperience(Character target)
@@ -85,15 +170,6 @@ namespace JDR.Models
             {
                 LevelUp();
             }
-        }
-    
-        // Adds a level to the character
-        protected virtual void LevelUp()
-        {
-            ExperienceValue -= ExperienceToNextLevel;
-            Level++;
-            Console.WriteLine($"Yay ! {Name} reached level {Level} !");
-            OnLevelUp?.Invoke();
         }
     
         // Equip item and change stats
@@ -169,7 +245,7 @@ namespace JDR.Models
             return heroType.ToLower() switch
             {
                 "mage" => new Mage(name, progression),
-                // "warrior" => new Warrior(name, progression),
+                "warrior" => new Warrior(name, progression),
                 // "archer" => new Archer(name, progression),
                 _ => throw new ArgumentException("Invalid hero type !")
             };

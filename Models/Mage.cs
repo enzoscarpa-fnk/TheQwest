@@ -11,11 +11,14 @@ namespace JDR.Models
             int level = 1,
             int experienceValue = 0,
             int energyValue = 13,
-            int armorValue = 2,
+            int armorValue = 1,
             int bonusDamage = 0,
             int criticalChance = 2,
             int hasteRating = 15,
-            int dodgeRating = 15
+            int dodgeRating = 15,
+            AttackInfo? lowTierAttackInfo = null,
+            AttackInfo? midTierAttackInfo = null,
+            AttackInfo? ultimateAttackInfo = null
             ) : base(characterName, progression)
         {
             Level = level;
@@ -26,11 +29,14 @@ namespace JDR.Models
             CriticalChance = criticalChance;
             HasteValue = hasteRating;
             DodgeRating = dodgeRating;
+            LowTierAttackInfo = lowTierAttackInfo ?? new AttackInfo("Frost Spikes", "Casts frost spikes that deals Frost damages.", 6);
+            MidTierAttackInfo = midTierAttackInfo ?? new AttackInfo("Arcane Shield", "Invokes an Arcane shield around you. Your armor value is now quadrupled.", 14);
+            UltimateAttackInfo = ultimateAttackInfo ?? new AttackInfo("Meteor Blast", "Casts a powerful meteor blast that deals Fire damages.", 22);
             InitializeStats();
         }
 
         // Initializes stats
-        private void InitializeStats()
+        protected override void InitializeStats()
         {
             Stamina = StatsCalculator.CalculateStat(8, 1.27, Level);
             Strength = StatsCalculator.CalculateStat(1, 1.05, Level);
@@ -38,32 +44,11 @@ namespace JDR.Models
             Agility = StatsCalculator.CalculateStat(1, 1.05, Level);
             Spirit = StatsCalculator.CalculateStat(7, 1.27, Level);
             MaxHealthValue = Stamina * 4;
-            MaxEnergyValue = (int)Math.Floor(13 * Spirit * 0.6);
-            AttackValue = (int)Math.Floor(Intellect * 1.8);
+            MaxEnergyValue = Spirit * 8;
+            AttackValue = Intellect * 2;
             if (Level == 1) // First initialization
             {
                 CurrentHealthValue = MaxHealthValue;
-                CurrentEnergyValue = MaxEnergyValue;
-            }
-        }
-    
-        // Overrides the base LevelUp method to update the stats
-        protected override void LevelUp()
-        {
-            base.LevelUp();
-            int previousMaxHealthValue = MaxHealthValue;
-            int previousMaxEnergyValue = MaxEnergyValue;
-            InitializeStats(); // Updates stats after level up
-            
-            // Adjust CurrentHealthValue & CurrentEnergyValue proportionally to the increase in MaxHealthValue & MaxEnergyValue
-            CurrentHealthValue += MaxHealthValue - previousMaxHealthValue;
-            CurrentEnergyValue += MaxEnergyValue - previousMaxEnergyValue;
-
-            // Ensure CurrentHealthValue & CurrentEnergyValue does not exceed MaxHealthValue & MaxEnergyValue
-            if (CurrentHealthValue > MaxHealthValue)
-                CurrentHealthValue = MaxHealthValue;
-            
-            if (CurrentEnergyValue > MaxEnergyValue)
                 CurrentEnergyValue = MaxEnergyValue;
         }
     
@@ -78,103 +63,32 @@ namespace JDR.Models
             }
             else
             {
-                int baseDamage = AttackValue + BonusDamage - target.ArmorValue;
+                int baseDamage = AttackValue - target.ArmorValue;
                 int damage = baseDamage <= 0 ? 0 : baseDamage;
-
-                int calculatedDamage = CriticalHit(damage, out bool isCritical);
-
-                string message = isCritical ? "Critical hit! " : "";
-                message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
-
-                Console.WriteLine(message);
-        
-                target.TakeDamage(calculatedDamage, this, restartGameAction);
-            }
-        }
-
-        // Low tier spell
-        public override bool LowTierAttack(Character target, Action restartGameAction)
-        {
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 6)
-            {
-                Console.WriteLine("Not enough Mana");
-                return false;
-            }
-            
-            if (target.Dodge())
-            {
-                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
-                return true;
-            }
-       
-            CurrentEnergyValue -= 6;
-            int baseDamage = (int)Math.Round((AttackValue + BonusDamage - target.ArmorValue) * 2.4);
-            int damage = baseDamage <= 0 ? 0 : baseDamage;
-        
-            int calculatedDamage = CriticalHit(damage, out bool isCritical);
-        
-            string message = isCritical ? "Critical hit! " : "";
-            message += $"Frost Spikes from {Name} dealt {calculatedDamage} damage to {target.Name}.";
-
-            Console.WriteLine(message);
-        
-            target.TakeDamage(calculatedDamage, this, restartGameAction);
-            return true;
-        }
 
         // Mid tier spell
         public override bool MidTierAttack(Character target, Action refreshUI)
         {
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 4)
+            int cost = MidTierAttackInfo.Cost;
+            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < cost)
             {
                 Console.WriteLine("Not enough Mana");
                 return false;
             }
 
-            CurrentEnergyValue -= 14;
+            CurrentEnergyValue -= cost;
             int originalArmorValue = target.ArmorValue;
             target.ArmorValue *= 4;
 
-            Console.WriteLine($"{target.Name} casts Arcane Shield! Armor value increased temporarily.");
+            Console.WriteLine($"{target.Name} casts {MidTierAttackInfo.Name}! Armor value increased temporarily.");
             refreshUI?.Invoke();  // Forces the UI to refresh after casting the spell
 
             // Delay before stat returns to original value
             // await Task.Delay(4000);
 
             target.ArmorValue = originalArmorValue;
-            Console.WriteLine($"{target.Name}'s Arcane Shield has worn off. Armor value returns to normal.");
+            Console.WriteLine($"{target.Name}'s {MidTierAttackInfo.Name} has worn off. Armor value returns to normal.");
             refreshUI?.Invoke();  // Forces the UI to refresh after the spell has no more effect
-            return true;
-        }
-
-        // Ultimate spell
-        public override bool UltimateAttack(Character target, Action restartGameAction)
-        {
-        
-            if (target.CurrentHealthValue == 0 || CurrentEnergyValue < 18)
-            {
-                Console.WriteLine("Not enough Mana");
-                return false;
-            }
-            
-            if (target.Dodge())
-            {
-                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
-                return true;
-            }
-
-            CurrentEnergyValue -= 26;
-            int baseDamage = (int)Math.Round((AttackValue + BonusDamage - target.ArmorValue) * 6.9);
-            int damage = baseDamage <= 0 ? 0 : baseDamage;
-        
-            int calculatedDamage = CriticalHit(damage, out bool isCritical);
-        
-            string message = isCritical ? "Critical hit! " : "";
-            message += $"Meteor Blast from {Name} dealt {calculatedDamage} damage to {target.Name}.";
-
-            Console.WriteLine(message);
-        
-            target.TakeDamage(calculatedDamage, this, restartGameAction);
             return true;
         }
     }

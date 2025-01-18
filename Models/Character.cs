@@ -1,5 +1,6 @@
 namespace JDR.Models
 {
+    public record AttackInfo(string Name, string Description, int Cost);
     public abstract class Character
     {
         
@@ -19,6 +20,7 @@ namespace JDR.Models
         public double CriticalHitFactor { get; set; }
         public int HasteValue { get; set; }
         public int DodgeRating { get; set; }
+        public AttackInfo BaseAttackInfo { get; protected set; }
 
         public Character(
             int x,
@@ -26,7 +28,8 @@ namespace JDR.Models
             string characterName,
             double criticalHitFactor = 1.72,
             int? hasteValue = null,
-            int? dodgeRating = null
+            int? dodgeRating = null,
+            AttackInfo? baseAttackInfo = null
             )
         {
             X = x;
@@ -35,19 +38,35 @@ namespace JDR.Models
             CriticalHitFactor = criticalHitFactor;
             HasteValue = hasteValue ?? rand.Next(1, 21);
             DodgeRating = dodgeRating ?? rand.Next(1, 21);
+            BaseAttackInfo = baseAttackInfo ?? new AttackInfo("Base attack", "A swift attack with bare hands or a weapon.", 0);
         }
         
         // The base attack
-        public virtual void BaseAttack(Character target, Action gameOverAction)
+        public virtual int BaseAttack(Character target, Action restartGameAction)
         {
-            if (target.CurrentHealthValue == 0) { return; }
+            if (target.CurrentHealthValue == 0) return 0;
+            int calculatedDamage = 0;
+            if (target.Dodge())
+            {
+                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
+            }
+            else
+            {
+                int damage = Math.Max(0, AttackValue - target.ArmorValue);
 
-            int baseDamage = AttackValue - target.ArmorValue;
-            int damage = baseDamage <= 0 ? 0 : baseDamage;
+                calculatedDamage = CriticalHit(damage, out bool isCritical);
 
-            target.TakeDamage(damage, this, gameOverAction);
+                string message = isCritical ? "Critical hit! " : "";
+                message += $"{BaseAttackInfo.Name} from {Name} dealt {calculatedDamage} damage to {target.Name}.";
+
+                Console.WriteLine(message);
+
+                target.TakeDamage(calculatedDamage, this, restartGameAction);
+            }
+            return calculatedDamage;
+
         }
-        
+
         public void Heal(int heal)
         {
             int healthBeforeHeal = CurrentHealthValue;
