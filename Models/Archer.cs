@@ -1,25 +1,25 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace JDR.Models
 {
-    public class Mage : Hero
+    public class Archer : Hero
     {
-        public Mage(
+        public Archer(
             string characterName,
             LevelProgression progression,
             int level = 1,
             int experienceValue = 0,
-            int energyValue = 13,
-            int armorValue = 1,
+            int energyValue = 11,
+            int armorValue = 2,
             int bonusDamage = 0,
-            int criticalChance = 2,
-            int hasteRating = 15,
+            int criticalChance = 5,
+            int hasteRating = 20,
             int dodgeRating = 15,
             AttackInfo? lowTierAttackInfo = null,
             AttackInfo? midTierAttackInfo = null,
             AttackInfo? ultimateAttackInfo = null
-            ) : base(characterName, progression)
+        ) : base(characterName, progression)
         {
             Level = level;
             ExperienceValue = experienceValue;
@@ -29,23 +29,23 @@ namespace JDR.Models
             CriticalChance = criticalChance;
             HasteValue = hasteRating;
             DodgeRating = dodgeRating;
-            LowTierAttackInfo = lowTierAttackInfo ?? new AttackInfo("Frost Spikes", "Casts frost spikes that deals Frost damages.", 6, 2.4);
-            MidTierAttackInfo = midTierAttackInfo ?? new AttackInfo("Arcane Shield", "Invokes an Arcane shield around you. Your armor value is now quadrupled.", 14, 4);
-            UltimateAttackInfo = ultimateAttackInfo ?? new AttackInfo("Meteor Blast", "Casts a powerful meteor blast that deals Fire damages.", 22, 5.9);
+            LowTierAttackInfo = lowTierAttackInfo ?? new AttackInfo("Quick Shot", "A swift arrow shot dealing minor damage.", 5, 1.4);
+            MidTierAttackInfo = midTierAttackInfo ?? new AttackInfo("Piercing Arrow", "Fires an arrow that ignores half of the target's armor.", 16, 0.5);
+            UltimateAttackInfo = ultimateAttackInfo ?? new AttackInfo("Rain of Arrows", "Launches a volley of arrows, damaging all enemies in range.", 20, 3.9);
             InitializeStats();
         }
 
         // Initializes stats
         protected override void InitializeStats()
         {
-            Stamina = StatsCalculator.CalculateStat(8, 1.27, Level);
-            Strength = StatsCalculator.CalculateStat(1, 1.05, Level);
-            Intellect = StatsCalculator.CalculateStat(4, 1.27, Level);
-            Agility = StatsCalculator.CalculateStat(1, 1.05, Level);
-            Spirit = StatsCalculator.CalculateStat(7, 1.27, Level);
+            Stamina = StatsCalculator.CalculateStat(8, 1.3, Level);
+            Strength = StatsCalculator.CalculateStat(2, 1.15, Level);
+            Intellect = StatsCalculator.CalculateStat(3, 1.1, Level);
+            Agility = StatsCalculator.CalculateStat(5, 1.3, Level);
+            Spirit = StatsCalculator.CalculateStat(6, 1.2, Level);
             MaxHealthValue = Stamina * 4;
-            MaxEnergyValue = Spirit * 8;
-            AttackValue = Intellect * 2;
+            MaxEnergyValue = Spirit * 6;
+            AttackValue = Agility * 3;
             if (Level == 1) // First initialization
             {
                 CurrentHealthValue = MaxHealthValue;
@@ -59,22 +59,23 @@ namespace JDR.Models
             int cost = MidTierAttackInfo.Cost;
             if (target.CurrentHealthValue == 0 || CurrentEnergyValue < cost)
             {
-                Console.WriteLine("Not enough Mana");
+                Console.WriteLine("Not enough Stamina");
                 return false;
             }
 
             CurrentEnergyValue -= cost;
+            int reducedArmor = (int)Math.Floor(target.ArmorValue * MidTierAttackInfo.Multiplier);
             int originalArmorValue = target.ArmorValue;
-            target.ArmorValue *= (int)Math.Floor(MidTierAttackInfo.Multiplier);
+            target.ArmorValue -= reducedArmor;
 
-            Console.WriteLine($"{target.Name} casts {MidTierAttackInfo.Name}! Armor value increased temporarily.");
+            Console.WriteLine($"{Name} uses {MidTierAttackInfo.Name}! {target.Name}'s armor is reduced temporarily.");
             refreshUI?.Invoke();  // Forces the UI to refresh after casting the spell
 
             // Delay before stat returns to original value
             // await Task.Delay(4000);
 
             target.ArmorValue = originalArmorValue;
-            Console.WriteLine($"{target.Name}'s {MidTierAttackInfo.Name} has worn off. Armor value returns to normal.");
+            Console.WriteLine($"{Name}'s {MidTierAttackInfo.Name} effect has worn off. {target.Name}'s armor returns to normal.");
             refreshUI?.Invoke();  // Forces the UI to refresh after the spell has no more effect
             return true;
         }

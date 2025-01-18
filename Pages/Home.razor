@@ -63,10 +63,10 @@
                 <div>
                     <label for="characterClass">Choose a class :</label><br/>
                     <select id="characterClass" @bind="CharacterClass" required>
-                        <option value="Choose a class" disabled selected>Choose a class</option>
+                        <option value="" disabled selected>Choose a class</option>
                         <option value="Mage">Mage</option>
-                        <option value="Warrior" disabled>Warrior</option>
-                        <option value="Archer" disabled>Archer</option>
+                        <option value="Warrior">Warrior</option>
+                        <option value="Archer">Archer</option>
                     </select>
                 </div>
                 <br/>
@@ -116,45 +116,45 @@
                         <p><strong>Energy:</strong> @hero?.CurrentEnergyValue / @hero?.MaxEnergyValue Mana</p>
 
                         <div class="image-container">
-                            <img src="images/attack.bmp" alt="Base Attack" class="spell-icon" @onclick="HeroBaseAttack" />
+                            <img src="images/attack.bmp" alt="@hero.BaseAttackInfo.Name" class="spell-icon" @onclick="HeroBaseAttack" />
                             <div class="popup-text">
-                                <span class="spell-title"><strong>Base Attack</strong></span>
-                                <span><br />Cost: 0 Mana</span>
-                                <span><br />A swift attack with bare hands or a weapon.</span>
+                                <span class="spell-title"><strong>@hero.BaseAttackInfo.Name</strong></span>
+                                <span><br />Cost: @hero.BaseAttackInfo.Cost Mana</span>
+                                <span><br />@hero.BaseAttackInfo.Description</span>
                                 <span><br />Base damage: @Math.Round((decimal)(hero?.AttackValue - monster.ArmorValue))</span>
                             </div>
                         </div>
 
                         <div class="image-container">
-                            <img src="images/frost.bmp" alt="Frost Spikes" class="spell-icon" @onclick="HeroLowTierAttack" />
+                            <img src="images/frost.bmp" alt="@hero.LowTierAttackInfo.Name" class="spell-icon" @onclick="HeroLowTierAttack" />
                             <div class="popup-text">
-                                <span class="spell-title"><strong>Frost Spikes</strong></span>
-                                <span><br />Cost: 6 Mana</span>
-                                <span><br />Casts frost spikes that deals Frost damages.</span>
+                                <span class="spell-title"><strong>@hero.LowTierAttackInfo.Name</strong></span>
+                                <span><br />Cost: @hero.LowTierAttackInfo.Cost Mana</span>
+                                <span><br />@hero.LowTierAttackInfo.Description</span>
                                 <span><br />Base damage: @Math.Round((decimal)((hero?.AttackValue - monster.ArmorValue) * 2.4))<br /></span>
                             </div>
                         </div>
 
                         <div class="image-container">
-                            <img src="images/shield.bmp" alt="Arcane Shield" class="spell-icon" @onclick="HeroMidTierAttack" />
+                            <img src="images/shield.bmp" alt="@hero.MidTierAttackInfo.Name" class="spell-icon" @onclick="HeroMidTierAttack" />
                             <div class="popup-text">
-                                <span class="spell-title"><strong>Arcane Shield</strong></span>
-                                <span><br />Cost: 14 Mana</span>
-                                <span><br />Invokes an Arcane shield around you. Your armor value is now quadrupled.</span>
+                                <span class="spell-title"><strong>@hero.MidTierAttackInfo.Name</strong></span>
+                                <span><br />Cost: @hero.MidTierAttackInfo.Cost Mana</span>
+                                <span><br />@hero.MidTierAttackInfo.Description</span>
                                 <span><br />Armor value: @Math.Round((decimal)(hero?.ArmorValue * 4))</span>
                             </div>
                         </div>
 
                         <div class="image-container">
-                            <img src="images/meteor.bmp" alt="Meteor Blast" class="spell-icon" @onclick="HeroUltimateAttack" />
+                            <img src="images/meteor.bmp" alt="@hero.UltimateAttackInfo.Name" class="spell-icon" @onclick="HeroUltimateAttack" />
                             <div class="popup-text">
-                                <span class="spell-title"><strong>Meteor Blast</strong></span>
-                                <span><br />Cost: 26 Mana</span>
-                                <span><br />Casts a powerful meteor blast that deals Fire damages.</span>
+                                <span class="spell-title"><strong>@hero.UltimateAttackInfo.Name</strong></span>
+                                <span><br />Cost: @hero.UltimateAttackInfo.Cost Mana</span>
+                                <span><br />@hero.UltimateAttackInfo.Description</span>
                                 <span><br />Base damage: @Math.Round((decimal)((hero?.AttackValue - monster.ArmorValue) * 6.9))</span>
                             </div>
                         </div>
-                        
+
                         <div class="image-container">
                             <div class="spell-spacer"></div>
                         </div>
@@ -299,8 +299,8 @@
 
             if (roll <= fleeChance)
             {
-                MonsterAttack();
-                Console.WriteLine($"{hero?.Name} took some damage by {monster?.Name} while fleeing !");
+                int damage = MonsterAttack();
+                Console.WriteLine($"{hero?.Name} took {damage} damage by {monster?.Name} while fleeing !");
                 mapComponent.EndFight(true);
             }
             else
@@ -325,11 +325,12 @@
 
 
     // Manages the monsters' attacks
-    private void MonsterAttack()
+    private int MonsterAttack()
     {
+        int output = 0;
         if (monster != null && hero != null)
         {
-            monster.BaseAttack(hero, GameOver);
+            output = monster.BaseAttack(hero, GameOver);
             StateHasChanged();
         }
 
@@ -337,6 +338,7 @@
         {
             SetGameOver(true);
         }
+        return output;
     }
 
     private void UpdateHeroStats(Hero updatedHero)

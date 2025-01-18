@@ -56,34 +56,15 @@ namespace JDR.Models
             InitializeStats();
         }
         // The base attack
-        public override void BaseAttack(Character target, Action restartGameAction)
+        public override int BaseAttack(Character target, Action restartGameAction)
         {
-            if (target.CurrentHealthValue == 0)
-                return;
-            
-            if (target.Dodge())
-            {
-                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
-            }
-            else
-            {
-                int baseDamage = AttackValue - target.ArmorValue;
-                int damage = baseDamage <= 0 ? 0 : baseDamage;
-
-                int calculatedDamage = CriticalHit(damage, out bool isCritical);
-
-                string message = isCritical ? "Critical hit! " : "";
-                message += $"Base attack from {Name} dealt {calculatedDamage} damage to {target.Name}.";
-
-                Console.WriteLine(message);
-
-                target.TakeDamage(calculatedDamage, this, restartGameAction);
-            }
+            int calculatedDamage = base.BaseAttack(target, restartGameAction);
             
             if (target is Hero hero)
             {
                 hero.RegenEnergyLow();
             }
+            return calculatedDamage;
         }
     }
 }
