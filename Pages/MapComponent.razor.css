@@ -50,13 +50,13 @@
 .boss {
     background-image: url('./images/Skeleton_Idle2.gif');
     background-repeat: no-repeat;
-    background-size: 100px;
+    background-size: 200px;
     background-position: center;
 }
 
 .fountain {
     background-image: url('./images/fountain3.gif');
     background-repeat: no-repeat;
-    background-size: 100px;
+    background-size: 64px;
     background-position: center;
 }
