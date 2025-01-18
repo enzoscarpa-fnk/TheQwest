@@ -48,6 +48,12 @@ body {
     padding-left: 10px;
 }
 
+#left-panel img {
+    max-height: 120px;
+    width: auto;
+    margin-bottom: 10px;
+}
+
 /* Center panel */
 #center-panel {
     width: 55%;
