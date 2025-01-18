@@ -55,7 +55,7 @@ namespace JDR.Models
             for (int i = 0; i < 1; i++)
             {
                 (int x, int y) = GetRandomPosition();
-                Monsters.Add(new Boss(x, y, hero.Level+2));
+                Monsters.Add(new Boss(x, y, hero.Level+2, "Skelletor"));
             }
         }
         
