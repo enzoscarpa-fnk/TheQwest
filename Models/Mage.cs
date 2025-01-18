@@ -29,9 +29,9 @@ namespace JDR.Models
             CriticalChance = criticalChance;
             HasteValue = hasteRating;
             DodgeRating = dodgeRating;
-            LowTierAttackInfo = lowTierAttackInfo ?? new AttackInfo("Frost Spikes", "Casts frost spikes that deals Frost damages.", 6);
-            MidTierAttackInfo = midTierAttackInfo ?? new AttackInfo("Arcane Shield", "Invokes an Arcane shield around you. Your armor value is now quadrupled.", 14);
-            UltimateAttackInfo = ultimateAttackInfo ?? new AttackInfo("Meteor Blast", "Casts a powerful meteor blast that deals Fire damages.", 22);
+            LowTierAttackInfo = lowTierAttackInfo ?? new AttackInfo("Frost Spikes", "Casts frost spikes that deals Frost damages.", 6, 2.4);
+            MidTierAttackInfo = midTierAttackInfo ?? new AttackInfo("Arcane Shield", "Invokes an Arcane shield around you. Your armor value is now quadrupled.", 14, 4);
+            UltimateAttackInfo = ultimateAttackInfo ?? new AttackInfo("Meteor Blast", "Casts a powerful meteor blast that deals Fire damages.", 22, 5.9);
             InitializeStats();
         }
 
@@ -50,21 +50,8 @@ namespace JDR.Models
             {
                 CurrentHealthValue = MaxHealthValue;
                 CurrentEnergyValue = MaxEnergyValue;
-        }
-    
-        // The base attack
-        public override void BaseAttack(Character target, Action restartGameAction)
-        {
-            if (target.CurrentHealthValue == 0) { return; }
-            
-            if (target.Dodge())
-            {
-                Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
             }
-            else
-            {
-                int baseDamage = AttackValue - target.ArmorValue;
-                int damage = baseDamage <= 0 ? 0 : baseDamage;
+        }
 
         // Mid tier spell
         public override bool MidTierAttack(Character target, Action refreshUI)
@@ -78,7 +65,7 @@ namespace JDR.Models
 
             CurrentEnergyValue -= cost;
             int originalArmorValue = target.ArmorValue;
-            target.ArmorValue *= 4;
+            target.ArmorValue *= (int)Math.Floor(MidTierAttackInfo.Multiplier);
 
             Console.WriteLine($"{target.Name} casts {MidTierAttackInfo.Name}! Armor value increased temporarily.");
             refreshUI?.Invoke();  // Forces the UI to refresh after casting the spell

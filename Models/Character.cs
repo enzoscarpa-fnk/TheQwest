@@ -1,6 +1,6 @@
 namespace JDR.Models
 {
-    public record AttackInfo(string Name, string Description, int Cost);
+    public record AttackInfo(string Name, string Description, int Cost, double Multiplier);
     public abstract class Character
     {
         
@@ -38,7 +38,7 @@ namespace JDR.Models
             CriticalHitFactor = criticalHitFactor;
             HasteValue = hasteValue ?? rand.Next(1, 21);
             DodgeRating = dodgeRating ?? rand.Next(1, 21);
-            BaseAttackInfo = baseAttackInfo ?? new AttackInfo("Base attack", "A swift attack with bare hands or a weapon.", 0);
+            BaseAttackInfo = baseAttackInfo ?? new AttackInfo("Base attack", "A swift attack with bare hands or a weapon.", 0, 1);
         }
         
         // The base attack
@@ -52,7 +52,7 @@ namespace JDR.Models
             }
             else
             {
-                int damage = Math.Max(0, AttackValue - target.ArmorValue);
+                int damage = Math.Max(0, (int)Math.Floor(AttackValue - target.ArmorValue * BaseAttackInfo.Multiplier));
 
                 calculatedDamage = CriticalHit(damage, out bool isCritical);
 

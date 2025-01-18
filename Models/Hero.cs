@@ -2,6 +2,7 @@ using System.Threading.Channels;
 
 namespace JDR.Models
 {
+    public enum Direction { Left, Right }
     public abstract class Hero : Character
     {
         public Direction FacingDirection { get; private set; } = Direction.Right;
@@ -102,7 +103,7 @@ namespace JDR.Models
                 Console.WriteLine($"{target.Name} dodged {Name}'s attack !");
                 return true;
             }
-            int damage = Math.Max(0, (int)Math.Round((AttackValue - target.ArmorValue) * 2.4));
+            int damage = Math.Max(0, (int)Math.Round((AttackValue - target.ArmorValue) * LowTierAttackInfo.Multiplier));
 
             int calculatedDamage = CriticalHit(damage, out bool isCritical);
 
@@ -110,10 +111,6 @@ namespace JDR.Models
             message += $"{LowTierAttackInfo.Name} from {Name} dealt {calculatedDamage} damage to {target.Name}.";
 
             Console.WriteLine(message);
-
-            target.TakeDamage(calculatedDamage, this, restartGameAction);
-            return true;
-        }
 
             target.TakeDamage(calculatedDamage, this, restartGameAction);
             return true;
@@ -137,7 +134,7 @@ namespace JDR.Models
             }
 
             CurrentEnergyValue -= cost;
-            int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * 5.9);
+            int baseDamage = (int)Math.Round((AttackValue - target.ArmorValue) * UltimateAttackInfo.Multiplier);
             int damage = baseDamage <= 0 ? 0 : baseDamage;
 
             int calculatedDamage = CriticalHit(damage, out bool isCritical);
@@ -246,11 +243,9 @@ namespace JDR.Models
             {
                 "mage" => new Mage(name, progression),
                 "warrior" => new Warrior(name, progression),
-                // "archer" => new Archer(name, progression),
+                "archer" => new Archer(name, progression),
                 _ => throw new ArgumentException("Invalid hero type !")
             };
         }
     }
-    
-    public enum Direction { Left, Right}
 }
