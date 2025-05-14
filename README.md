@@ -1,7 +1,5 @@
 ![The Qwest logo](https://i.ibb.co/YN2sLRT/the-qwest.png)
 
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
-
 Ce projet est une implémentation d'un jeu de rôle (JDR) développé en C#, contenant des classes, des ressources et un exécutable principal. Voici une vue d'ensemble pour vous guider dans l'installation, l'exécution et la personnalisation du jeu.
 
 Liste base : 
