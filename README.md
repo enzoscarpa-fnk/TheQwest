@@ -2,31 +2,31 @@
 
 Ce projet est une implémentation d'un jeu de rôle (JDR) développé en C#, contenant des classes, des ressources et un exécutable principal. Voici une vue d'ensemble pour vous guider dans l'installation, l'exécution et la personnalisation du jeu.
 
-Liste base : 
+**<ins>Liste base :</ins>** 
 
-    Un héro :
-    - Point de vie (+-20PV)
-    - Une attaque
-    - Stat de défense (Réduction de dégat)
+Un héro :
+* Point de vie (+-20PV)
+* Une attaque
+* Stat de défense (Réduction de dégat)
 
-    Une map : 
-    - Différents environnement (Forêt, prairie) (purement graphique)
-    - Une zone de boss (ou deux)
-    - Un endroit de spawn (respawn)
+Une map : 
+* Différents environnement (Forêt, prairie) (purement graphique)
+* Une zone de boss (ou deux)
+* Un endroit de spawn (respawn)
 
-    Au moins 3 ennemis (par zone) et 1 boss:
-    - Point de vie
-    - Une attaque
-    - Stat de défense
+Au moins 3 ennemis (par zone) et 1 boss:
+* Point de vie
+* Une attaque
+* Stat de défense
 
-    Fontaine de vie :
-    - Rend entre 5 et 15 PV
-    - Visible sur la map
-    - Placé aléatoirement sur la map
+Fontaine de vie :
+* Rend entre 5 et 15 PV
+* Visible sur la map
+* Placé aléatoirement sur la map
     
-    Coffres
-    - Bonus d'attaque (Différents types d'arme (Hache, épée, bois, bronze, or))
-    - Bonus de défense (Type d'armure (Fer, tissu, cuir ..))
+Coffres
+* Bonus d'attaque (Différents types d'arme (Hache, épée, bois, bronze, or))
+* Bonus de défense (Type d'armure (Fer, tissu, cuir ..))
 
 
 ## <ins>Pour commencer</ins>
@@ -162,5 +162,16 @@ Cela démarrera le programme principal défini dans Program.cs.
 * Ajout d’animations de combat
 * Génération de maps procédurales plus complexes de manière pseudo-aléatoire (normal maps, height maps, Perlin noise…)
 
+<p align="center">
+  <img src="https://i.ibb.co/7JVsQGvP/theqwest1.png" alt="New game" />
+</p>
+
+<p align="center">
+  <img src="https://i.ibb.co/FqcNmN7q/theqwest2.png" alt="Fight" />
+</p>
+
+<p align="center">
+  <img src="https://i.ibb.co/G4f1Hh58/theqwest3.png" alt="Treasure" />
+</p>
 
 <ins>last edited by FNK on 2025/01/18</ins>
