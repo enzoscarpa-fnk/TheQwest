@@ -1,166 +1,180 @@
-![The Qwest logo](https://i.ibb.co/YN2sLRT/the-qwest.png)
+<p align="center">
+  <img src="https://i.ibb.co/YN2sLRT/the-qwest.png" alt="The Qwest logo" />
+</p>
 
-Ce projet est une implémentation d'un jeu de rôle (JDR) développé en C#, contenant des classes, des ressources et un exécutable principal. Voici une vue d'ensemble pour vous guider dans l'installation, l'exécution et la personnalisation du jeu.
+# The Qwest
 
-**<ins>Liste base :</ins>** 
+This project is a role-playing game (RPG) developed in C#, featuring classes, resources, and a main executable.  
+Below is an overview to help you install, run, and customize the game.
 
-Un héro :
-* Point de vie (+-20PV)
-* Une attaque
-* Stat de défense (Réduction de dégat)
+---
 
-Une map : 
-* Différents environnement (Forêt, prairie) (purement graphique)
-* Une zone de boss (ou deux)
-* Un endroit de spawn (respawn)
+## 🧾 **Basic Elements**
 
-Au moins 3 ennemis (par zone) et 1 boss:
-* Point de vie
-* Une attaque
-* Stat de défense
+### Hero:
+- Health Points (~20 HP)
+- One attack
+- Defense stat (damage reduction)
 
-Fontaine de vie :
-* Rend entre 5 et 15 PV
-* Visible sur la map
-* Placé aléatoirement sur la map
-    
-Coffres
-* Bonus d'attaque (Différents types d'arme (Hache, épée, bois, bronze, or))
-* Bonus de défense (Type d'armure (Fer, tissu, cuir ..))
+### Map:
+- Different environments (Forest, Meadows)
+- One or two boss zones
+- Spawn/respawn point
 
+### Enemies & Bosses:
+- At least 3 enemies per zone and 1 boss
+- Health Points
+- One attack
+- Defense stat
 
-## <ins>Pour commencer</ins>
+### Fountain of Life:
+- Restores between 5 and 15 HP
+- Visible on the map
+- Randomly placed on the map
 
-### <ins>Pré-requis</ins>
+### Chests:
+- Attack bonuses from different weapon types (Axe, Sword…) and materials (Wood, Bronze, Gold…)
+- Defense bonuses from different armor materials (Plate, Cloth, Leather…)
 
-Avant de commencer, assurez-vous d'avoir installé les outils suivants :
+---
 
-.NET 8.0 SDK ou version ultérieure : Requis pour compiler et exécuter le projet.
+## 🚀 Getting Started
 
-Téléchargez-le depuis : https://dotnet.microsoft.com/
+### Prerequisites
 
-Un éditeur de code : Par exemple, Visual Studio ou Visual Studio Code.
+Make sure the following tools are installed:
 
-### <ins>Installation</ins>
+- **.NET 8.0 SDK or newer** — Required to build and run the project  
+  → [Download here](https://dotnet.microsoft.com/)
 
-Clonez ce dépôt ou téléchargez-le sous forme d'archive ZIP :
+- **A code editor** — e.g., Visual Studio or Visual Studio Code
 
-git clone <https://github.com/ArnaudClarat/JDR.git>
+### Installation
+
+Clone this repository or download it as a ZIP archive:
+
+```bash
+git clone https://github.com/ArnaudClarat/JDR.git
 cd JDR
+```
 
-Restaurez les dépendances avec le gestionnaire .NET si nécessaire :
+Restore dependencies if needed:
 
+```bash
 dotnet restore
+```
 
-## <ins>Démarrage</ins>
+---
 
-Pour lancer le jeu, exécutez simplement la commande suivante :
+## ▶️ Running the Game
 
+To launch the game, run the following command:
+
+```bash
 dotnet run
+```
 
-Cela démarrera le programme principal défini dans Program.cs.
+This will start the main program defined in `Program.cs`.
 
-## <ins>Fabriqué avec</ins>
+---
 
-* [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) - Framework front-end basé sur C#  
-* [Blazor Web Assembly](http://materializecss.com) - Framework CSS (front-end)
-* [Visual Studio Code](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) - Exécution d'applications web côté client avec .NET  
+## 🛠️ Built With
 
-## <ins>Auteurs</ins>
+- [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) – Frontend framework using C#  
+- [Blazor WebAssembly](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) – WebAssembly runtime
 
-* **Anthony Chang** _alias_ [@changzhiho](https://github.com/changzhiho)
-* **Arnaud Clarat** _alias_ [@ArnaudClarat](https://github.com/ArnaudClarat)
-* **Kévin Goossens** _alias_ [@KGOx](https://github.com/KGOx)
-* **Enzo Scarpa** _alias_ [@enzoscarpa-fnk](https://github.com/enzoscarpa-fnk)
+---
 
-## <ins>Etapes de création du projet</ins>
+## 👥 Authors
 
-**<ins>Bases du jeu :</ins>**
+- **Anthony Chang** _aka_ [@changzhiho](https://github.com/changzhiho)  
+- **Arnaud Clarat** _aka_ [@ArnaudClarat](https://github.com/ArnaudClarat)  
+- **Kévin Goossens** _aka_ [@KGOx](https://github.com/KGOx)  
+- **Enzo Scarpa** _aka_ [@enzoscarpa-fnk](https://github.com/enzoscarpa-fnk)
 
-* Création d’un plateau de jeu (map) avec une grille simple de 10x10
-* Création d’un héros qui peut se déplacer sur la map (avec sprite d’animation)
-* Création d’une fontaine de vie pour soigner le héros
+---
 
+## 🧱 Project Development Steps
 
-**<ins>Module de combat :</ins>**
+### 🕹️ Game Foundation:
 
-* v1.0:
-    * Ajout d’une classe Character:
-    * Ajout des propriétés de base (niveau, expérience, PV…)
-    * Ajout de méthodes de base (attaque, prise de dégât, soin, mort…)
-* Ajout des classes Hero_Mage et Hero_Warrior (héritent de Character)
-* Ajout d’une interface pour les combats
+- Created a 10x10 grid-based game board (map)
+- Created a hero that can move on the map (with sprite animations)
+- Added a fountain of life to heal the hero
 
-* v2.0:
-    * Ajout d’un composant Console pour afficher les informations de combat directement dans l’UI 
+### ⚔️ Combat Module:
 
-* v3.0:
-    * Ajout d’un système de progression de niveau
-    * Ajout d’un système de calcul des statistiques du héros
-    * Ajout de monstres + méthode de calcul du niveau du monstre en fonction du niveau du héros
-    * Abandon prévu du mode PvP (test) pour un mode PvE (final)
+- **v1.0:**
+  - Added `Character` class with basic properties (level, XP, HP...)
+  - Added basic methods (attack, take damage, heal, die...)
+  - Added `Hero_Mage` class (inherit from `Character`)
+  - Created a UI interface for combat
 
-* v4.0:
-    * Introduction de la map avec le système de combat
-    * Introduction des méthodes de déplacement du héros
-    * Introduction des méthodes d’interactions avec les entités
-    * Introduction des méthodes pour gérer la fin de partie
-    * Modification de l’héritage en insérant une classe Hero entre Character et les différentes classes de héros
-    * Ajout de sorts spécialisés pour le Mage
+- **v2.0:**
+  - Added a console component to display combat info in the UI
 
-* v5.0:
-    * Ajout de la gestion du module de combat (trigger), affiche/retire le module en fonction de l’état de combat du héros
-    * Ajout de propriétés principales (Endurance, Force, Esprit…) et secondaires (Hâte, Chance de critique…)
-    * Redéfinition de méthodes spécialisées pour le héros prenant en compte les nouvelles propriétés
-    * Introduction d’une classe Item prévoyant l’ajout de stats au héros grâce au bonus d’objets
+- **v3.0:**
+  - Added level progression system
+  - Added hero stat calculation system
+  - Added monsters + dynamic monster level based on hero level
 
-* v6.0:
-    * Ajout d’une méthode de fuite
-    * Redéfinition des calculs de statistiques pour le levelling
-    * Intégration de concepts tels que la régénération d’énergie (en combat/hors combat), la hâte (détermination du premier attaquant), l’esquive, l’ajout de stats bonus par l’équipement
+- **v4.0:**
+  - Integrated combat system with the map
+  - Added hero movement and interaction methods
+  - Added end-of-game logic
+  - Introduced `Hero` class between `Character` and hero subclasses
+  - Added specialized spells for Mage
 
+- **v5.0:**
+  - Added combat module trigger (show/hide based on state)
+  - Introduced primary (Endurance, Strength, Spirit…) and secondary (Haste, Crit Chance…) stats
+  - Updated hero methods to account for new stats
+  - Added `Item` class to apply stat bonuses via equipment
 
-**<ins>Map :</ins>**
+- **v6.0:**
+  - Added escape mechanic
+  - Redefined stat calculations for leveling
+  - Integrated mechanics like energy regeneration, haste, dodge, and gear-based bonuses
 
-* Ajout d’une classe et d’un composant Map pour simplifier la gestion du fichier Home
-* Déplacement des propriétés et méthodes de la map dans sa classe
-* Déplacement de la gestion de l’affichage et des interactions de la map dans son composant
-* Intégration du composant de la map dans le fichier Home
-* Ajout de gestionnaires d’évènement pour le dialogue entre les composants
+### 🗺️ Map System:
 
+- Added `Map` class and component to clean up `Home` file
+- Moved map properties and methods to `Map`
+- Handled display and interactions within `Map` component
+- Integrated map component into `Home`
+- Added event handlers for inter-component communication
 
-**<ins>Trésors & Objets :</ins>**
+### 💰 Treasure & Items:
 
-* Ajout d’une classe Trésor pour gérer le comportement des trésors sur la map
-* Ajout des classes Armure et Arme pour pouvoir équiper le héros grâce aux trésors trouvés
-* Ajout de propriétés et de méthodes pour les armes et armures afin de déterminer leur rareté et leur performance grâce à des calculs de probabilité
+- Added `Treasure` class to manage chest behavior
+- Added `Armor` and `Weapon` classes to equip the hero
+- Defined rarity and performance via probability-based calculations
 
+### 🏠 Home File:
 
-**<ins>Fichier Home :</ins>**
+- Added character creation module (name, class) at game start
+- Added hero stat display module
+- Added hero inventory display module
 
-* Ajout d’un module de création de personnage en début de partie (nom, classe)
-* Ajout d’un module d’affichage des stats du héros
-* Ajout d’un module d’affichage de l’inventaire du héros
+### 🔄 Game Flow:
 
+- Switched from real-time to turn-based combat system
 
-**<ins>Fonctionnement du jeu :</ins>**
+### ➕ What's Next?
 
-* Passage d’un système de tour par tour au lieu d’un système en temps réel pour les combats
+- Game balance
+- Tooltips for items
+- Enhanced graphic design
+- Audio feedback integration
+- Add doors/teleporters to navigate between maps (with other bosses, quests, treasures…)
+- Integrate NPCs for shop/quests/dialogue
+- Add basic storyline with main and side quests
+- Convert combat, stats, and inventory modules into components
+- Add difficulty levels based on scaling factors
+- Combat animations
+- Procedural map generation (normal maps, height maps, Perlin noise…)
 
-
-**<ins>La suite? :</ins>**
-
-* Balance du jeu
-* Tootltips sur les objets
-* Habillage graphique évolué
-* Habillage audio
-* Ajout d’un système de portes/téléporteurs pour passer d’une map à une autre (avec d’autres monstres, boss, trésors, quêtes…)
-* Intégration de NPCs permettant des interactions diverses (commerçant, donneur de quêtes) avec des dialogues dédiés
-* Ajout d’une trame basique avec une quêtes principale et quelques quêtes secondaires
-* Transformer les modules de combat, de stats héros, et d’inventaire en composant
-* Ajout de niveaux de difficultés basés sur un facteur pour certaines propriétés des monstres et du héros
-* Ajout d’animations de combat
-* Génération de maps procédurales plus complexes de manière pseudo-aléatoire (normal maps, height maps, Perlin noise…)
+---
 
 <p align="center">
   <img src="https://i.ibb.co/7JVsQGvP/theqwest1.png" alt="New game" />
@@ -174,4 +188,4 @@ Cela démarrera le programme principal défini dans Program.cs.
   <img src="https://i.ibb.co/G4f1Hh58/theqwest3.png" alt="Treasure" />
 </p>
 
-<ins>last edited by FNK on 2025/01/18</ins>
+---
